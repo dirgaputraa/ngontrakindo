@@ -1,0 +1,22 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}Ngontrakindo - Lengkapi Data{% endblock %}
+
+{% block content %}
+<div style="padding-top: 6%; padding-bottom: 20%; height: absolute">
+	<div class="container">
+		<div class="col-sm-6 col-sm-offset-3">
+			<h1>Lengkapi data diri Anda</h1>
+			<hr>
+			<form method="POST" action="{% url 'lengkapi2' %}">{% csrf_token %}
+                {{ form|crispy }}
+			  <div class="form-actions">
+			  <button class="pull-right btn w3-teal w3-hover-teal w3-hover-text-yellow" type="submit">Submit</button>
+			  </div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,142 @@
+{% extends "pemilik2.html" %}
+{% load staticfiles %}
+{% load account %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+<div class="w3-bar w3-top w3-teal w3-large" style="z-index:4;">
+  <button id="menu" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  <button id="close" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" style="display: none;" onclick="w3_close();"><i class="fa fa-close"></i>  Close</button>
+  <span class="w3-bar-item w3-right"><a class="w3-hover-text-yellow" href="/k/{{ kontrakan.slug }}" target="blank">{{ kat }} {{ kontrakan.nama }}</a></span>
+</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+  <!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h2><b>Rating & Ulasan</b></h2><hr>
+  </header>
+
+  <div class="w3-container">
+  <div class="row">
+  <div class="col-sm-12">
+	<div id="rateYo"></div>
+	  <h2>{{ rating.rating__avg|floatformat }}</h2>
+		<p><i class="fa fa-user"></i> total {{ ulasan.count }}</p>
+		{% if ulasan.exists %}
+	    <table class="w3-table w3-white w3-bordered w3-card-4">
+	    {% for p_ul, u_ul, ulasan in z_ul %}
+	      <tr>
+	        <td width="50"><img src="{{ p_ul.avatar.url }}" class="w3-circle w3-margin-right" style="width:50px"></td>
+	        <td><p><a href="#"><b>{{ u_ul.first_name }} {{ u_ul.last_name }}</b></a> <span style="font-size: 12px" class="w3-text-grey">{{ ulasan.timestamp|date:'d F Y' }} pada {{ ulasan.timestamp|date:'H:i' }}</span></p>{% with ''|center:ulasan.rating as range %}
+                          {% for y in range %}
+                            <span class="glyphicon glyphicon-star w3-text-grey"></span>
+                          {% endfor %}
+                        {% endwith %}
+	        <p>{{ ulasan.ulasan }}</p>
+	        {% if ulasan.balasan == ''  %}
+	        <button data-toggle="modal" data-target="#balas{{ forloop.counter0 }}" class="pull-right w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow">Balas</button>
+	        {% else %}
+	        <div style="width: 56px" class="col-sm-1">
+	        <img src="{{ pemilik.avatar.url }}" class="w3-circle w3-margin-right" style="width:48px;padding-top: 5px"> 
+	        </div>
+	        <div class="col-sm-11">
+	        <span style="font-size: 12px" class="w3-text-grey">Dibalas tanggal {{ ulasan.tgl_balas|date:'d F Y' }} pada {{ ulasan.tgl_balas|date:'H:i' }}</span>
+	        <p>{{ ulasan.balasan }}</p>
+	        </div>
+	        {% endif %}
+	        </td>
+	      </tr>
+	      {% endfor %}
+	     </table>
+		  {% else %}
+		    <h1 style="padding-top: 10%" class="w3-center w3-text-grey"><i class="fa w3-xxxlarge fa-comment w3-center"></i><br>Belum ada ulasan</h1>
+		  {% endif %}
+                   <!--  {% for p_ul, u_ul, ulasan in z_ul %}
+                    <br>
+		<div class="col-sm-8 col-sm-offset-2">
+                    <div class="row">
+                        <div class="col-sm-1">
+                          <p><img src="{{ p_ul.avatar.url }}" class="w3-circle w3-margin-right" style="width:50px"></p>
+                        </div>
+                        <div class="col-sm-11">
+                            <p><a href="#"><b>{{ u_ul.first_name }} {{ u_ul.last_name }}</b></a> <span style="font-size: 12px" class="w3-text-grey">{{ ulasan.timestamp|date:'d F Y' }} pada {{ ulasan.timestamp|date:'H:i' }}</span></p>
+                        {% with ''|center:ulasan.rating as range %}
+                          {% for y in range %}
+                            <span class="glyphicon glyphicon-star w3-text-grey"></span>
+                          {% endfor %}
+                        {% endwith %}
+                            <p>{{ ulasan.ulasan }}</p>
+                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    {% endfor %} -->
+  </div>
+  </div>
+  </div>
+
+</div>
+
+{% for p_ul, u_ul, ulasan in z_ul %}
+        <div class="modal fade" id="balas{{ forloop.counter0 }}" role="dialog">
+          <div style="width: 720px; max-width: 100%" class="modal-dialog w3-card">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header w3-teal">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title"><img src="{% static 'img/logo.png' %}"></h2>
+              </div>
+              <div class="modal-body">
+              <div class="w3-container">
+              <div class="row">
+                <div class="col-sm-1">
+                	<p><img src="{{ p_ul.avatar.url }}" class="w3-circle w3-margin-right" style="width:48px"></p>
+                </div>
+                <div class="col-sm-11">
+                <p><a href="#"><b>{{ u_ul.first_name }} {{ u_ul.last_name }}</b></a> <span style="font-size: 12px" class="w3-text-grey">{{ ulasan.timestamp|date:'d F Y' }} pada {{ ulasan.timestamp|date:'H:i' }}</span></p>
+                <p>{{ ulasan.ulasan }}</p>
+                </div>
+                </div><br>
+              <div class="row">
+                <div class="col-sm-1">
+                <img src="{{ pemilik.avatar.url }}" class="w3-circle w3-margin-right" style="width:48px">
+                </div>
+                <div class="col-sm-11">
+                <p><b>Balas</b></p>
+                <form method="POST" action="">
+                {% csrf_token %}
+                <textarea name="balas" style="resize:none" placeholder="Respon Anda terhadap ulasan dapat mempengaruhi penilaian penghuni/pencari kontrakan." class="form-control" rows="5" id="balas"></textarea>
+                <input hidden type="text" name="id" value="{{ ulasan.id }}">
+                </div>
+                </div><br>
+                  <div class="pull-right"><button type="submit" class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow">Kirim</button> <div data-dismiss="modal" class="w3-button w3-dark-grey w3-hover-dark-grey w3-hover-text-yellow">Batal</div><br>
+                  </form>
+                  </div>
+              </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+{% endfor %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+<script>
+    $(function () {
+ 
+      $("#rateYo").rateYo({
+        rating: parseInt({{ rating.rating__avg|floatformat }}),
+        readOnly: true,
+        halfStar: true,
+        starWidth: "30px",
+      });
+    });
+</script>
+{% endblock %}

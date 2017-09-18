@@ -1,0 +1,29 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}Ngontrakindo - Daftar {% endblock %}
+
+{% block content %}
+<div class="kepala" style="padding-top: 5%; padding-bottom: 20%">
+	<div class="container w3-text-white">
+		<div class="col-sm-6 w3-mobile">
+			<h1>Daftar</h1>
+			<hr>
+			<form id="signup_form" method="POST" action="{% url 'account_signup' %}">{% csrf_token %}
+				{{ form|crispy }}
+				{% if redirect_field_value %}
+			  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+			  {% endif %}
+			  <div class="form-actions">
+			  <button class="btn w3-teal w3-hover-teal w3-hover-text-yellow" type="submit">Daftar</button>
+			  </div>
+			</form>
+		</div>
+		<div class="col-sm-6 w3-mobile" style="padding-top: 10%">
+			<h1 class="w3-text-yellow"><b>Dengan NGONTRAKINDO</b></h1>
+			<h3>cari kontrakan, promosi, dan administrasi kontrakan jadi lebih mudah.</h3>
+		</div>
+	</div>
+</div>
+{% endblock content %}

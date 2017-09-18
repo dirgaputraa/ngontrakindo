@@ -1,0 +1,31 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}Ngontrakindo - Form Kontrakan{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<!-- <div class="kepala">
+    <div class="container text-center">
+        <img class="w3-mobile" src="{% static 'img/ngontrak2.png' %}">
+    </div>
+ </div> -->
+<div id="administrasi" class="w3-light-grey" style="height: absolute;padding-top: 15%; padding-bottom: 10%">
+	<div class="container">
+		<div class="col-sm-8 col-sm-offset-2">
+  			 <form name="myForm" method="POST" action="">
+		        {% csrf_token %}
+		        {{ form|crispy }}
+		        <input class="btn w3-indigo w3-hover-teal w3-hover-text-yellow pull-right" type="submit" value="Daftar" />
+		    </form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block js %}
+{% endblock %}

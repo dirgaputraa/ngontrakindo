@@ -1,0 +1,117 @@
+{% extends "pemilik2.html" %}
+{% load staticfiles %}
+{% load account %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+<div class="w3-bar w3-top w3-teal w3-large" style="z-index:4;">
+  <button id="menu" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  <button id="close" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" style="display: none;" onclick="w3_close();"><i class="fa fa-close"></i>  Close</button>
+  <span id="asd" class="w3-bar-item w3-right"><a class="w3-hover-text-yellow" href="/k/{{ kontrakan.slug }}" target="blank"> {{ kat }} {{ kontrakan.nama }}</a></span>
+</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div id="Dashboard" class="w3-main city" style="margin-left:300px;margin-top:43px;">
+  <!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h2><b>Dashboard</b></h2>
+  </header>
+
+  <div class="w3-row-padding w3-margin-bottom detail">
+    <div class="w3-quarter">
+      <div class="w3-container w3-purple w3-padding-16">
+        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ kontrakan.n_penghuni }}/{{ kontrakan.n_unit }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Penghuni</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-blue w3-padding-16">
+        <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ kontrakan.dilihat }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Pengunjung</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-orange w3-text-white  w3-padding-16">
+        <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ rating.rating__avg|floatformat }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Rating</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-green w3-padding-16">
+        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ ulasan }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Ulasan</h4>
+      </div>
+    </div>
+  </div>
+  <div class="w3-row-padding">
+  	<div class="w3-half w3-center">
+  		<p>Pengunjung {{ kat }} {{ kontrakan.nama }}</p>
+		<canvas height="200" id="lineChart"></canvas>  		
+  	</div>
+  	<div class="w3-half w3-center">
+  		<p>Penghuni {{ kat }} {{ kontrakan.nama }}</p>
+  		<canvas height="200" id="pieChart"></canvas>
+  	</div>
+  </div>
+  <!-- End page content -->
+</div>
+<script type="text/javascript">
+var ctxL = document.getElementById("lineChart").getContext('2d');
+var myLineChart = new Chart(ctxL, {
+    type: 'line',
+    data: {
+        labels: [{% for t in tgl %}"{{ t|date:'d/m' }}",{% endfor %}],
+        datasets: [
+            {
+                label: "Pengunjung",
+                backgroundColor: 'rgba(7, 155, 130, 0.4)',
+                borderColor: "rgba(7, 155, 130, 1)",
+                data: {{ vi }}
+            }
+        ]
+    },
+    options: {
+        responsive: true
+    }    
+});
+var ctxP = document.getElementById("pieChart").getContext('2d');
+var myPieChart = new Chart(ctxP, {
+    type: 'doughnut',
+    data: {
+        labels: ["User Ngontrakindo", "Non-Ngontrakindo", "Kosong"],
+        datasets: [
+            {
+                data: {{ z_pie }},
+                backgroundColor: ["#06a88d", "#FDB45C", "#4D5360"],
+                hoverBackgroundColor: ["#03c1a2", "#FFC870", "#616774"]
+            }
+        ]
+    },
+    options: {
+        responsive: true
+    }    
+});
+</script> 
+{% endblock %}

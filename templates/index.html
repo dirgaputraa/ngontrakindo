@@ -1,0 +1,69 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load account %}
+{% block title %}Ngontrakindo - Beranda {% endblock %}
+
+{% block content %}
+<!-- <script type="text/javascript">
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LfBkSoUAAAAAGEV8JrCEozecArDvIzsYNpVSukG'
+        });
+      };
+</script> -->
+<div class="w3-sidebar w3-bar-block w3-card-2 w3-animate-right" style="width: 260px;display:none;right:0;top: 0" id="rightMenu">
+  <button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large w3-right-align">&times;</button>
+  <div class="w3-container">
+  <h3 class="w3-right-align">Notifikasi</h3>
+  </div>
+  <a href="#" class="w3-bar-item w3-button w3-right-align">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button w3-right-align">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button w3-right-align">Link 3</a>
+</div>
+<div class="kepala">
+    <div class="container text-center">
+        <img class="w3-mobile" src="{% static 'img/ngontrak2.png' %}">
+        <p style="font-size: 22px" class="w3-text-white">Sistem administrasi rumah kontrakan berbasis Cloud</p><br>
+        
+    </div>
+ </div>
+
+    <!-- Page Content -->
+    <div class="w3-container-fluid">
+        <div class="container">
+        <div class="row">
+        <div class="w3-padding-64 w3-center">
+            <img src="/media/logo3.png">
+            <h1 class="w3-text-gray">Apa itu Ngontrakindo?</h1>
+            <hr>
+            <p class="w3-text-gray" style="padding-left: 25%;padding-right: 25%">Ngontrakindo adalah sistem administrasi berbasis web yang dapat membantu pemilik kontrakan/kost menjalankan proses administrasi kontrakan seperti pendataan penghuni dan pencatatan transaksi sewa.</p>
+            <a class="w3-button w3-teal w3-hover-yellow" href="{% url 'daftar' %}"><h5>Daftar</h5></a>
+        </div>
+        </div>
+        <br>
+    </div>
+{% endblock %}
+
+{% block js %}
+<!-- jQuery -->
+    <script>
+            function initialize() {
+                var options = {
+                    componentRestrictions: {
+                        country: 'id'
+                    }
+                };
+                var input = document.getElementById('searchTextField');
+                var autocomplete = new google.maps.places.Autocomplete(input,options);
+                }
+
+                google.maps.event.addDomListener(window, 'load', initialize);
+            function openRightMenu() {
+                document.getElementById("rightMenu").style.display = "block";
+            }
+            function closeRightMenu() {
+                document.getElementById("rightMenu").style.display = "none";
+            }
+    </script>
+    <!-- Bootstrap Core JavaScript -->
+{% endblock %}

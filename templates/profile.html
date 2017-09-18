@@ -1,0 +1,154 @@
+{% extends "base2.html" %}
+{% load staticfiles %}
+{% load account %}
+{% block title %}Ngontrakindo | {{ x.first_name }} {{ x.last_name }} {% endblock %}
+
+{% block content %}
+                    <div class="w3-container">
+                    {% if birth and request.user.username == x.username %}
+                    <div class="w3-panel w3-pale-green w3-leftbar w3-border-blue">
+                      <h2>Selamat ulang tahun, {{ request.user.first_name }} <i class="fa fa-birthday-cake w3-text-orange"></i> <i class="fa fa-gift w3-text-pink"></i></h2>
+                      <p>Semoga panjang umur, sehat selalu, murah rezeki dan dilancarkan segala urusannya.</p>
+                    </div> 
+                    {% endif %}
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active"><a data-toggle="tab" href="#profiluser"><span class="fa fa-2x fa-user"></span> <h6><b>Profil</b></h6></a></li>
+                        <li><a data-toggle="tab" href="#kont"><span class="fa fa-2x fa-home"></span><h6><b>Kontrakan</b></h6></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="profiluser" class="tab-pane fade in active">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p><b>Tanggal Lahir</b></p>
+                                </div>
+                                <div class="col-md-9">
+                                    <p>{{ user.tgl_lahir|date:"d F o" }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p><b>Jenis Kelamin</b></p>
+                                </div>
+                                <div class="col-md-9">
+                                    <p>{{ user.get_jk_display }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p><b>Alamat</b></p>
+                                </div>
+                                <div class="col-md-9">
+                                    <p>{{ user.alamat }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p><b>Profesi</b></p>
+                                </div>
+                                <div class="col-md-9">
+                                    <p>{{ user.get_profesi_display }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p><b>Instansi</b></p>
+                                </div>
+                                <div class="col-md-9">
+                                    <p>{{ user.instansi }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p><b>Media Sosial</b></p>
+                                </div>
+                                <div class="col-md-9">
+                                    <p>
+                                    {% if not fb == '' %}
+                                        <a href="https://www.facebook.com/{{ fb }}" target="blank">
+                                        <span class="fa-stack fa-1x">
+                                              <i class="fa fa-square fa-stack-2x w3-text-indigo"></i>
+                                              <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                        </span></a>
+                                    {% endif %}
+                                    {% if not tw == '' %}
+                                        <a href="https://www.twitter.com/{{ tw }}" target="blank">
+                                        <span class="fa-stack fa-1x">
+                                              <i class="fa fa-square fa-stack-2x w3-text-blue"></i>
+                                              <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                        </span></a>
+                                    {% endif %}
+                                    {% if not ins == '' %}
+                                        <a href="https://www.instagram.com/{{ ins }}" target="blank">
+                                        <span class="fa-stack fa-1x">
+                                              <i class="fa fa-square fa-stack-2x w3-text-pink"></i>
+                                              <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                                        </span></a>
+                                    {% endif %}
+                                    </p>
+                                    {% if request.user.is_authenticated and request.user.username == x.username %}
+                                    <a href="{% url 'editprofil' %}" class="btn w3-indigo w3-hover-text-yellow pull-right">Edit Profile</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div id="kont" class="tab-pane fade">
+                            <br>
+                            {% if user.user_type == '1' %}
+                            <div class="row">
+                            {% for kont, f, wr in z_kont %}
+                            <div style="padding-bottom: 20px" class="col-sm-4">
+                            <div class="w3-card-4">
+                            <a href="/k/{{ kont.slug }}"><img style="width: 100%;height: 180px;" src="{{ f }}"></a>
+                            <div class="container-fluid">
+                            {% if kont.kategori == '1' or kont.kategori == '2' %}
+                            <p><a href="/k/{{ kont.slug }}"><h4><b>Kontrakan {{ kont.nama }}</b></h4></a></p>
+                            {% else %}
+                            <p><a href="/k/{{ kont.slug }}"><h4><b>Kost {{ kont.nama }}</b></h4></a></p>
+                            {% endif %}
+                            <p><span class="w3-tag {{ wr }}"><i class="fa fa-home"></i> {{ kont.get_kategori_display }}</span></p>
+                            <p>Sebagai Pemilik</p>
+                            </div>
+                            </div>
+                            </div>
+                            {% endfor %}
+                            </div>
+                            {% if request.user.is_authenticated and request.user.username == x.username %}
+                            <a href="{% url 'dashboard' %}" class="btn w3-indigo w3-hover-text-yellow pull-right">Administrasi Kontrakan</a>
+                            {% endif %}
+                            {% elif user.user_type == '2' %}
+                            {% if kont.kategori == '1' or kont.kategori == '2' %}
+                            <h4>Pengurus Kontrakan {{ kont.nama }}</h4>
+                            {% else %}
+                            <h4>Pengurus Kost {{ kont.nama }}</h4>
+                            {% endif %}
+                            {% else %}
+                            {% if p.exists %}
+                            <div class="row">
+                            {% for ktr, ft, status, w in z_png %}
+                            <div style="padding-bottom: 20px" class="col-sm-4">
+                            <div class="w3-card-4">
+                            <img style="width: 100%;height: 180px;" src="/media/{{ ft.foto }}">
+                            <div class="container-fluid">
+                            {% if ktr.kategori == '1' or ktr.kategori == '2' %}
+                            <p><a href="/k/{{ ktr.slug }}"><h4><b>Kontrakan {{ ktr.nama }}</b></h4></a></p>
+                            {% else %}
+                            <p><a href="/k/{{ ktr.slug }}"><h4><b>Kost {{ ktr.nama }}</b></h4></a></p>
+                            {% endif %}
+                            <p><span class="w3-tag {{ w }}"><i class="fa fa-home"></i> {{ ktr.get_kategori_display }}</span></p>
+                            <p>{{ status }}</p>
+                            </div>
+                            </div>
+                            </div>
+                            {% endfor %}
+                            </div>
+                            {% else %}
+                            <h3>Sedang tidak menghuni kontrakan</h3>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div><br>
+                    </div>
+    <!-- /.container -->
+
+{% endblock %}

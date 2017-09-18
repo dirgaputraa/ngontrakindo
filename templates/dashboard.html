@@ -1,0 +1,89 @@
+{% extends "pemilik.html" %}
+{% load staticfiles %}
+{% load account %}
+
+{% block header %}
+<div class="w3-bar w3-top w3-teal w3-large" style="z-index:4;">
+  <button id="menu" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  <button id="close" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" style="display: none;" onclick="w3_close();"><i class="fa fa-close"></i>  Close</button>
+  <span class="w3-bar-item w3-right">Administrasi</span>
+</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+  <!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h3><b>Semua Kontrakan</b></h3><hr>
+  </header>
+
+  <div class="w3-container">
+    <table class="w3-table w3-white w3-hoverable w3-bordered w3-card-4">
+      <tr class="w3-indigo">
+        <th>Domain Kontrakan</th>
+        <th>Tanggal Daftar</th>
+        <th>Status</th>
+      </tr>
+{% for k in kontrakan %}
+      <a target="blank" id="go{{ forloop.counter0 }}" href="http://{{ k.domain }}/"></a>
+      <tr {% if not k.proses %}class="w3-pale-red" {% else %} onclick="document.getElementById('go{{ forloop.counter0 }}').click()" {% endif %}>
+        <td class="w3-button w3-hover-none w3-padding-16"><b>{{ k.domain }}</b></td>
+        <td class="w3-button w3-hover-none w3-padding-16">{{ k.tanggal_daftar|date:"d M, Y H:i" }}</td>
+        <td class="w3-button w3-hover-none w3-padding-16">{% if k.proses %}Aktif{% else %}Belum Aktif{% endif %}</td>
+      </tr>
+{% endfor %}
+    </table>
+  </div>
+
+  <!-- <div class="w3-row-padding w3-margin-bottom detail">
+    <div class="w3-quarter">
+      <div class="w3-container w3-orange w3-text-white w3-padding-16">
+        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ k.n_penghuni }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Penghuni</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-blue w3-padding-16">
+        <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ k.dilihat }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Views</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-purple w3-padding-16">
+        <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>52</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Rating</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-green w3-padding-16">
+        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>23</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Ulasan</h4>
+      </div>
+    </div>
+  </div> -->
+
+
+  <!-- End page content -->
+</div>
+{% endblock %}

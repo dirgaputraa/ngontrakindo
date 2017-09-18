@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Shop Item - Start Bootstrap Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/modern-business.css" rel="stylesheet">
+    <link href="css/w3.css" rel="stylesheet">
+    <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <style>
+      #map {
+        height: 100%;
+      }
+
+      .carousel-indicators.carousel-indicators--thumbnails li {
+          width: 60px;
+          margin: 0;
+          border: none;
+          border-radius: 0;
+        }
+        .carousel-indicators.carousel-indicators--thumbnails .active {
+          background-color: transparent;
+        }
+        .carousel-indicators.carousel-indicators--thumbnails .active .thumbnail {
+          border-color: #337ab7;
+        }
+        
+        a {
+            font-color: blue;
+        }
+        p {
+            font-size: 14px;
+        }
+        td {
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body class="w3-light-grey">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Ngontrakindo</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="about.html">Daftar</a>
+                    </li>
+                    <li>
+                        <a href="services.html">Login</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+            <br>
+
+    <!-- Page Content -->
+    <div class="container">
+                <h1>Kontrakan H. Jali</h1>
+                <hr>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                    <div class="panel panel-default">
+                      <div class="panel-heading w3-blue">Pemilik Kontrakan</div>
+                      <div class="panel-body w3-center">
+                        <span class="fa-stack fa-3x">
+                                  <i class="fa fa-user-circle-o fa-stack-2x fa-inverse w3-text-grey"></i>
+                        </span>
+                        <h4><b>Andi Ghazali</b></h4><hr>
+                        <button class="btn btn-primary" style="width: 100%;"><span class="fa fa-phone"></span> Kontak</button>
+                      </div>
+                    </div>
+                    <div class="panel panel-default">
+                      <div class="panel-heading w3-blue">Status Kontrakan</div>
+                      <div class="panel-body">
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x text-black"></i>
+                              <i class="fa fa-check fa-stack-1x fa-inverse w3-text-amber"></i>
+                        </span> Lulus Verifikasi
+                        <br>
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x text-vlack"></i>
+                              <i class="fa fa-home fa-stack-1x fa-inverse"></i>
+                        </span> Tersedia 2 dari 5 Unit
+                        <h5><b>Rp 750.000/bulan</b></h5>
+                      </div>
+                    </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="thumbnail">
+                    <div id="myCarousel" class="carousel slide w3-black" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators carousel-indicators--thumbnails">
+    <li data-target="#myCarousel" data-slide-to="0" class="active">
+    <div class="thumbnail">
+        <img src="kontrakan/2.jpg">
+    </div>
+    </li>
+    <li data-target="#myCarousel" data-slide-to="1">
+        <div class="thumbnail">
+        <img src="kontrakan/6.jpg">
+    </div>
+    </li>
+    <li data-target="#myCarousel" data-slide-to="2">
+        <div class="thumbnail">
+        <img src="kontrakan/7.jpg">
+    </div>
+    </li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+      <a data-toggle="modal" data-target="#myModal1"><img style="height: 400px;" src="kontrakan/2.jpg"></a>
+      
+    </div>
+
+    <div class="item">
+      <a data-toggle="modal" data-target="#myModal2"><img style="height: 400px;" src="kontrakan/6.jpg"></a>
+      
+    </div>
+    <div class="item">
+      <a data-toggle="modal" data-target="#myModal3"><img style="height: 400px;" src="kontrakan/7.jpg"></a>
+      
+    </div>
+  </div>
+
+  <div id="myModal1" class="modal fade w3-center">
+    <img src="kontrakan/2.jpg">
+  </div>
+  <div id="myModal2" class="modal fade w3-center">
+    <img src="kontrakan/6.jpg">
+  </div>
+  <div id="myModal3" class="modal fade w3-center">
+    <img src="kontrakan/7.jpg">
+  </div>
+
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <span class="sr-only">Next</span>
+  </a>
+
+</div>
+                    <div id="map" style="width:100%;height:400px;"></div>
+                    <div class="w3-container">
+                        <h4><b>Alamat Lengkap</b></h4>
+                        <p>Jl. Dr. Abdul Rahman Saleh No.21, RT 08/02</p>
+                        <p>Kelurahan Senen, Kecamatan Senen</p>
+                        <p>Jakarta Pusat</p>
+                        
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#fasilitas2"><h5><b>Fasilitas</b></h5></a></li>
+                        <li><a data-toggle="tab" href="#deskripsi"><h5><b>Deskripsi Kontrakan</b></h5></a></li>
+                        <li><a data-toggle="tab" href="#administrasi"><h5><b>Administrasi</b></h5></a></li>
+                        <li><a data-toggle="tab" href="#biaya"><h5><b>Biaya</b></h5></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="fasilitas2" class="tab-pane active">
+                            <br>
+                            <div class="row">
+                            <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="w3-table">
+                                    <tr>
+                                        <td width="20"><span style="font-size: 22px;" class="fa fa-flash w3-text-blue"></span></td>
+                                        <td><b>Listrik</b> Sudah Termasuk</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="font-size: 22px;" class="fa fa-shower w3-text-blue"></span></td>
+                                        <td><b>Kamar Mandi</b> Dalam</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="font-size: 22px;" class="fa fa-wifi w3-text-blue"></span></td>
+                                        <td><b>Wifi</b></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="w3-table">
+                                    <tr>
+                                        <td width="20"><span style="font-size: 22px;" class="fa fa-square-o w3-text-blue"></span></td>
+                                        <td><b>Luas(meter)</b> 15 x 10</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="font-size: 22px;" class="fa fa-motorcycle w3-text-blue"></span></td>
+                                        <td><b>Parkiran</b> motor</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div id="deskripsi" class="tab-pane fade">
+                            <div class="w3-container">
+                            <br>
+                                <p>Berdiri sejak 2010, Kontrakan ini konsisten memberikan pelayanan terbaik untuk penghuni demi menciptakan kehidupan yang nyaman dan tentram. </p>
+                            </div>
+                        </div>
+                        <div id="administrasi" class="tab-pane fade">
+                            <div class="w3-container">
+                            <br>
+                                <p>- KTP asli & fotocopy 1 lembar</p>
+                                <p>- Surat nikah/Kartu Keluarga(bagi pasangan suami-istri)</p>
+                                <p>- DP: Uang sewa bulan pertama</p>
+                            </div>
+                            </div>
+                        <div id="biaya" class="tab-pane fade">
+                            <div class="w3-container">
+                            <br>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Biaya sewa</b></p></div>
+                                    <div class="col-md-8"><p>Rp 750.000/Bulan</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Tanggal Pembayaran</b></p></div>
+                                    <div class="col-md-8"><p>25 - 10</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Lewat batas pembayaran</b></p></div>
+                                    <div class="col-md-8"><p>Denda Rp 20.000,-</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Angsuran</b></p></div>
+                                    <div class="col-md-8"><p>2x @ 50% biaya sewa</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Barang Elektronik Maks</b></p></div>
+                                    <div class="col-md-8"><p>5 Unit</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <p>Data dapat berubah sewaktu-waktu</p>
+                    </div>
+                </div>
+                <h2>Review dari penghuni kontrakan</h2>
+
+                <div class="thumbnail">
+                    <div class="w3-container">
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="pull-right">10 hari yang lalu</span>
+                            <p><a href="#"><b>Rahmat Pratama</b></a></p>
+                            <p>Air nya kecil!</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="pull-right">12 hari yang lalu</span>
+                            <p><a href="#"><b>Riska Putri</b></a></p>
+                            <p>Pemiliknya ganteng</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="pull-right">15 hari yang lalu</span>
+                            <p><a href="#"><b>Rizky Balong</b></a></p>
+                            <p>Gentengnya kamar saya bocor. Akan saya kasih 5 bintang jika sudah tidak bocor.</p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    <div class="container">
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2014</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+      function initMap() {
+        var uluru = {lat: -6.179439, lng: 106.838477};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlw60i96JYTyQk-ppcZUI06Y6oDjVzw3k&callback=initMap">
+    </script>
+</body>
+
+</html>

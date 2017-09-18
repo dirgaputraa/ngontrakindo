@@ -1,0 +1,153 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}Ngontrakindo - Form Kontrakan{% endblock %}
+
+{% block css %}
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      
+      
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- <div class="kepala">
+    <div class="container text-center">
+        <img class="w3-mobile" src="{% static 'img/ngontrak2.png' %}">
+    </div>
+ </div> -->
+<div class="w3-light-grey" style="height: absolute;padding-top: 4%; padding-bottom: 10%">
+	<div class="container">
+        <div class="jumbotron w3-indigo">
+       <h1>3. Biaya Kontrakan</h1>
+        <p>Rincian biaya untuk penghuni kontrakan Anda</p>
+             </div>
+		<div class="col-sm-8 col-sm-offset-2">
+  			 <form name="myForm" method="POST" action="">
+		        {% csrf_token %}
+		        <!-- {{ form|crispy }} -->
+                <label><b>Biaya Sewa</b></label>
+                <div class="form-group"> <div id="div_id_harian" class="checkbox"> <label for="id_harian" class=""> <input type="checkbox" name="harian" class="checkboxinput" id="id_harian">
+                    Harian
+                </label> </div> </div> <div id="div_id_per_hari" class="form-group" style="display: none;"> <label for="id_per_hari_0" class="control-label ">
+                Per hari(Rp)
+            </label> <div class="controls "> <input type="number" name="per_hari_0" step="0.01" class="numberinput form-control" id="id_per_hari_0">
+            <select name="per_hari_1" class="select form-control" id="id_per_hari_1" style="display: none;"> <option value="IDR" selected="">Rupiah</option></select>
+            </div>
+            </div>
+
+            <div class="form-group"> <div id="div_id_mingguan" class="checkbox"> <label for="id_mingguan" class=""> <input type="checkbox" name="mingguan" class="checkboxinput" id="id_mingguan">
+                    Mingguan
+                </label> </div> </div> <div id="div_id_per_minggu" class="form-group" style="display: none;"> <label for="id_per_minggu_0" class="control-label ">
+                Per minggu(Rp)
+            </label> <div class="controls "> <input type="number" name="per_minggu_0" step="0.01" class="numberinput form-control" id="id_per_minggu_0">
+            <select name="per_minggu_1" class="select form-control" id="id_per_minggu_1" style="display: none;"><option value="IDR" selected="">Rupiah</option></select>
+            </div>
+            </div>
+
+            <div class="form-group"> <div id="div_id_bulanan" class="checkbox"> <label for="id_bulanan" class=""> <input type="checkbox" name="bulanan" class="checkboxinput" id="id_bulanan">
+                    Bulanan
+                </label> </div> </div> <div id="div_id_per_bulan" class="form-group" style="display: none;"> <label for="id_per_bulan_0" class="control-label ">
+                Per bulan(Rp)
+            </label> <div class="controls "> <input type="number" name="per_bulan_0" step="0.01" class="numberinput form-control" id="id_per_bulan_0">
+            <select name="per_bulan_1" class="select form-control" id="id_per_bulan_1" style="display: none;"><option value="IDR" selected="">Rupiah</option></select>
+            </div>
+            </div>
+
+            <div class="form-group"> <div id="div_id_tahunan" class="checkbox"> <label for="id_tahunan" class=""> <input type="checkbox" name="tahunan" class="checkboxinput" id="id_tahunan">
+                    Tahunan
+                </label> </div> </div> <div id="div_id_per_tahun" class="form-group" style="display: none;"> <label for="id_per_tahun_0" class="control-label ">
+                Per tahun(Rp)
+            </label> <div class="controls "> <input type="number" name="per_tahun_0" step="0.01" class="numberinput form-control" id="id_per_tahun_0">
+            <select name="per_tahun_1" class="select form-control" id="id_per_tahun_1" style="display: none;"><option value="IDR" selected="">Rupiah</option></select>
+            </div>
+            </div>
+            <br>
+            <div id="div_id_denda" class="form-group"> <label for="id_denda_0" class="control-label ">
+                Denda
+            </label> <div class="controls "> <input type="number" name="denda_0" step="0.01" class="numberinput form-control" id="id_denda_0">
+            <select name="denda_1" class="select form-control" id="id_denda_1" style="display: none;"><option value="IDR" selected="">Rupiah</option></select>
+            </div>
+            </div>
+            <p class="w3-text-grey">Untuk pengisian biaya lain dapat Anda lakukan pada menu <b>Pengaturan Kontrakan</b> setelah proses pendaftaran kontrakan selesai</p>
+            <br>
+            <div id="div_id_penghuni_max" class="form-group"> <label for="id_penghuni_max" class="control-label  requiredField">
+                Jumlah Penghuni Maksimal<span class="asteriskField">*</span> </label> <div class="controls "> <input type="number" name="penghuni_max" value="1" required="" class="numberinput form-control" id="id_penghuni_max"> </div> </div> 
+            <p class="w3-text-grey">maksimal jumlah penghuni yang diperbolehkan dalam satu kontrakan/kost</p>
+            <br>
+            <div id="div_id_syarat_ketentuan" class="form-group"> <label for="id_syarat_ketentuan" class="control-label ">
+                Syarat dan Ketentuan Kontrakan
+            </label> <div class="controls "> <textarea name="syarat_ketentuan" id="id_syarat_ketentuan" rows="10" cols="40" class="textarea form-control"></textarea> </div> </div>
+
+		        <input class="btn w3-indigo w3-hover-teal w3-hover-text-yellow pull-right" type="submit" value="Simpan, dan lihat halaman Profil Kontrakan Anda" />
+		    </form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+{% block js %}
+    <script>
+    	document.getElementById('id_denda_1').style.display = "none";
+    	var h = [
+    	document.getElementById('div_id_per_hari'),
+    	document.getElementById('div_id_per_minggu'),
+    	document.getElementById('div_id_per_bulan'),
+    	document.getElementById('div_id_per_tahun')
+    	];
+
+    	var c = [
+    	document.getElementById('id_harian'),
+    	document.getElementById('id_mingguan'),
+    	document.getElementById('id_bulanan'),
+    	document.getElementById('id_tahunan')  	
+    	];
+
+    	var n = [
+    	document.getElementById('id_per_hari_1'),
+    	document.getElementById('id_per_minggu_1'),
+    	document.getElementById('id_per_bulan_1'),
+    	document.getElementById('id_per_tahun_1')  	
+    	];
+
+    	for(var j = 0; j < h.length; j++) {
+    		h[j].style.display = "none";
+    		n[j].style.display = "none";
+    		c[j].onclick = myFunction;
+    	};
+
+    	
+    	function myFunction() {
+    		for (var i = 0; i < h.length; i++) {
+    			if(c[i].checked){h[i].style.display="block";}
+    			else{h[i].style.display="none";}
+    		};    		
+    	};
+
+    	var bl = document.getElementById('id_biaya_lain');
+    	bl.onclick = biayaLain;
+
+    	function biayaLain() {
+    		if (bl.checked) {document.getElementById('bl').style.display = "block";}
+    		else{document.getElementById('bl').style.display = "none";}
+    	}
+
+    	// var m = document.getElementById('div_id_per_minggu');
+    	// var b = document.getElementById('div_id_per_bulan');
+    	// var t = document.getElementById('div_id_per_tahun');
+    	// h.style.display = "none";
+    	// m.style.display = "none";
+    	// b.style.display = "none";
+    	// t.style.display = "none";
+
+
+
+    </script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}Ngontrakindo - Daftar {% endblock %}
+
+{% block content %}
+<div class="kepala" style="padding-top: 5%; padding-bottom: 10%">
+	<div class="container w3-text-white">
+		<div class="col-sm-8 col-sm-offset-2">
+			<h1>{{ title }}</h1>
+			<hr>
+
+			<form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+				{{ form|crispy }}
+				<input type="submit" class="btn w3-teal w3-hover-teal w3-hover-text-yellow" value="{{ title }}">
+				<a href="{% url 'login' %}" class="pull-right w3-hover-text-yellow">Sudah pernah daftar? Login</a>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

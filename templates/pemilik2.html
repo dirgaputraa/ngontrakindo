@@ -1,0 +1,130 @@
+{% load staticfiles %}
+{% load account %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ngontrakindo | Administrasi Kontrakan</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" type="image/png" href="/media/favicon.ico"/>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'css/w3.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="{% static 'css/cropper.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/bootstrap-slider.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/bootstrap-slider.min.js"></script>
+<script src="{% static 'js/cropper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Noto Sans", sans-serif}
+</style>
+</head>
+<body class="w3-light-grey">
+
+<!-- Top container -->
+{% block header %}
+{% endblock %}
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s3">
+      <a href="/{{ request.user.username }}"><img src="{{ pemilik.avatar.url }}" class="w3-circle w3-margin-right" style="width:48px"></a>
+    </div>
+    <div class="w3-col s9 w3-bar">
+      <a href="/{{ request.user.username }}"><h5>{{ request.user.first_name }} {{ request.user.last_name }}</h5></a>
+      <!-- <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a> -->
+    </div>
+  </div>
+  <hr>
+  {% if pemilik.user_type == '1' %}
+  <div class="w3-bar-block">
+  <a href="{% url 'dashboard' %}" class="w3-bar-item w3-button w3-padding" disabled><h4><i class="fa fa-arrow-left"></i> <b>Semua Kontrakan</b></h4></a>
+  </div>
+  {% endif %}
+  <div id="bar" class="w3-bar-block">
+    <a href="/administrasi/dashboard/{{ kontrakan.slug }}" class="w3-bar-item w3-button w3-padding{% if title == 'Dashboard' %} w3-indigo {% endif %} ""><h5><i class="fa fa-dashboard fa-fw"></i>  Dashboard</h5></a>
+
+    <a href="/administrasi/user/{{ kontrakan.slug }}" class="w3-bar-item w3-button w3-padding{% if title == 'User' %} w3-indigo {% endif %} "><h5><i class="fa fa-id-card fa-fw"></i>  User</h5></a>
+
+  {% if pemilik.user_type == '2' and png.edit_kontrakan or pemilik.user_type == '1' %}
+    <a href="/administrasi/kontrakan/{{ kontrakan.slug }}" class="w3-bar-item w3-button w3-padding{% if title == 'Kontrakan' %} w3-indigo {% endif %} "><h5><i class="fa fa-home fa-fw"></i>  Kontrakan</h5></a>
+  {% endif %}
+
+  {% if pemilik.user_type == '2' and png.konfirm_penghuni or pemilik.user_type == '1' %}
+    <a href="/administrasi/penghuni/{{ kontrakan.slug }}" class="w3-bar-item w3-button w3-padding{% if title == 'Penghuni' %} w3-indigo {% endif %} "><h5><i class="fa fa-users fa-fw"></i>  Penghuni</h5></a>
+  {% endif %}
+    
+  {% if pemilik.user_type == '2' and png.transaksi or pemilik.user_type == '1' %}
+    <a href="/administrasi/transaksi/{{ kontrakan.slug }}" class="w3-bar-item w3-button w3-padding{% if title == 'Transaksi' %} w3-indigo {% endif %} "><h5><i class="fa fa-money fa-fw"></i>  Transaksi</h5></a>
+  {% endif %}
+
+  {% if pemilik.user_type == '2' and png.galeri or pemilik.user_type == '1' %}
+    <a href="/administrasi/galeri/{{ kontrakan.slug }}" class="w3-bar-item w3-button w3-padding{% if title == 'Galeri' %} w3-indigo {% endif %} "><h5><i class="fa fa-image fa-fw"></i>  Galeri</h5></a>
+  {% endif %}
+
+  {% if pemilik.user_type == '2' and png.ulasan or pemilik.user_type == '1' %}
+    <a href="/administrasi/ulasan/{{ kontrakan.slug }}" class="w3-bar-item w3-button w3-padding{% if title == 'Ulasan' %} w3-indigo {% endif %} "><h5><i class="fa fa-comment fa-fw"></i>  Rating & Ulasan</h5></a>
+  {% endif %}
+
+
+  </div>
+</nav>
+
+
+{% block content %}
+{% endblock %}
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+        document.getElementById("menu").style.display = "none";
+        document.getElementById("close").style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+    document.getElementById("menu").style.display = "block";
+    document.getElementById("close").style.display = "none";
+}
+
+function myDrop() {
+    var d = document.getElementById("Demo");
+    if (d.className.indexOf("w3-show") == -1) {
+        d.className += " w3-show";
+    } else { 
+        d.className = d.className.replace(" w3-show", "");
+    }
+}
+</script>
+</body>
+</html>

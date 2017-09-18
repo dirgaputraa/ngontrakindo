@@ -1,0 +1,431 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load account %}
+{% block title %}Ngontrakindo - Beranda {% endblock %}
+
+{% block content %}
+    <style>
+      #map {
+        height: 100%;
+      }
+
+      .carousel-indicators.carousel-indicators--thumbnails li {
+          width: 60px;
+          margin: 0;
+          border: none;
+          border-radius: 0;
+        }
+        .carousel-indicators.carousel-indicators--thumbnails .active {
+          background-color: transparent;
+        }
+        .carousel-indicators.carousel-indicators--thumbnails .active .thumbnail {
+          border-color: #337ab7;
+        }
+        
+        a {
+            font-color: blue;
+        }
+        p {
+            font-size: 14px;
+        }
+        td {
+            font-size: 14px;
+        }
+    </style>
+
+    <!-- Navigation -->
+    <div class="container" style="padding-top: 5%; height: absolute;">
+    <h1>Kontrakan H. Jali</h1>
+    <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading w3-teal"><b>Juragan</b></div>
+                    <div class="panel-body w3-center">
+                        <span class="fa-stack fa-3x">
+                            <i class="fa fa-user-circle-o fa-stack-2x fa-inverse w3-text-grey"></i>
+                        </span>
+                        <h4><b>Andi Ghazali</b></h4>
+                    </div>
+                </div>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a data-toggle="pill" href="#profil">Profil</a></li>
+                    <li><a data-toggle="pill" href="#penghuni">Penghuni</a></li>
+                    <li><a data-toggle="pill" href="#forum">Forum Diskusi</a></li>
+                    <li><a data-toggle="pill" href="#laporan">Laporan</a></li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+            <div class="tab-content">
+                <div id="profil" class="tab-pane fade in active">                
+                <div class="thumbnail">
+                    <div id="myCarousel" class="carousel slide w3-black" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators carousel-indicators--thumbnails">
+    <li data-target="#myCarousel" data-slide-to="0" class="active">
+    <div class="thumbnail">
+        <img src="kontrakan/2.jpg">
+    </div>
+    </li>
+    <li data-target="#myCarousel" data-slide-to="1">
+        <div class="thumbnail">
+        <img src="kontrakan/6.jpg">
+    </div>
+    </li>
+    <li data-target="#myCarousel" data-slide-to="2">
+        <div class="thumbnail">
+        <img src="kontrakan/7.jpg">
+    </div>
+    </li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+      <a data-toggle="modal" data-target="#myModal1"><img style="height: 400px;" src="kontrakan/2.jpg"></a>
+      
+    </div>
+
+    <div class="item">
+      <a data-toggle="modal" data-target="#myModal2"><img style="height: 400px;" src="kontrakan/6.jpg"></a>
+      
+    </div>
+    <div class="item">
+      <a data-toggle="modal" data-target="#myModal3"><img style="height: 400px;" src="kontrakan/7.jpg"></a>
+      
+    </div>
+  </div>
+
+  <div id="myModal1" class="modal fade w3-center">
+    <img src="kontrakan/2.jpg">
+  </div>
+  <div id="myModal2" class="modal fade w3-center">
+    <img src="kontrakan/6.jpg">
+  </div>
+  <div id="myModal3" class="modal fade w3-center">
+    <img src="kontrakan/7.jpg">
+  </div>
+
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <span class="sr-only">Next</span>
+  </a>
+
+</div>
+                    <div id="map" style="width:100%;height:400px;"></div>
+                    <div class="w3-container">
+                        <h4><b>Alamat Lengkap</b></h4>
+                        <p>Jl. Dr. Abdul Rahman Saleh No.21, RT 08/02</p>
+                        <p>Kelurahan Senen, Kecamatan Senen</p>
+                        <p>Jakarta Pusat</p>
+                        
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#fasilitas2"><h5><b>Fasilitas</b></h5></a></li>
+                        <li><a data-toggle="tab" href="#deskripsi"><h5><b>Deskripsi Kontrakan</b></h5></a></li>
+                        <li><a data-toggle="tab" href="#administrasi"><h5><b>Administrasi</b></h5></a></li>
+                        <li><a data-toggle="tab" href="#biaya"><h5><b>Biaya</b></h5></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="fasilitas2" class="tab-pane fade in active">
+                            <br>
+                            <div class="row">
+                            <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="w3-table">
+                                    <tr>
+                                        <td width="20"><span style="font-size: 22px;" class="fa fa-flash w3-text-blue"></span></td>
+                                        <td><b>Listrik</b> Sudah Termasuk</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="font-size: 22px;" class="fa fa-shower w3-text-blue"></span></td>
+                                        <td><b>Kamar Mandi</b> Dalam</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="font-size: 22px;" class="fa fa-wifi w3-text-blue"></span></td>
+                                        <td><b>Wifi</b></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="w3-table">
+                                    <tr>
+                                        <td width="20"><span style="font-size: 22px;" class="fa fa-square-o w3-text-blue"></span></td>
+                                        <td><b>Luas(meter)</b> 15 x 10</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="font-size: 22px;" class="fa fa-motorcycle w3-text-blue"></span></td>
+                                        <td><b>Parkiran</b> motor</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div id="deskripsi" class="tab-pane fade">
+                            <div class="w3-container">
+                            <br>
+                                <p>Berdiri sejak 2010, Kontrakan ini konsisten memberikan pelayanan terbaik untuk penghuni demi menciptakan kehidupan yang nyaman dan tentram. </p>
+                            </div>
+                        </div>
+                        <div id="administrasi" class="tab-pane fade">
+                            <div class="w3-container">
+                            <br>
+                                <p>- KTP asli & fotocopy 1 lembar</p>
+                                <p>- Surat nikah/Kartu Keluarga(bagi pasangan suami-istri)</p>
+                                <p>- DP: Uang sewa bulan pertama</p>
+                            </div>
+                            </div>
+                        <div id="biaya" class="tab-pane fade">
+                            <div class="w3-container">
+                            <br>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Biaya sewa</b></p></div>
+                                    <div class="col-md-8"><p>Rp 750.000/Bulan</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Tanggal Pembayaran</b></p></div>
+                                    <div class="col-md-8"><p>25 - 10</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Lewat batas pembayaran</b></p></div>
+                                    <div class="col-md-8"><p>Denda Rp 20.000,-</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Angsuran</b></p></div>
+                                    <div class="col-md-8"><p>2x @ 50% biaya sewa</p></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><p><b>Barang Elektronik Maks</b></p></div>
+                                    <div class="col-md-8"><p>5 Unit</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary pull-right">Edit</button><br>
+                    <hr>
+                    <p>Data dapat berubah sewaktu-waktu</p>
+                    </div>
+                </div>
+
+                
+
+            </div>
+                <div id="penghuni" class="tab-pane fade">
+                    <div class="thumbnail">
+                        <div class="w3-container">
+                            <h2>Penghuni</h2><hr>
+                        <div id="detail" style="display: none;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading w3-blue"><b>Riska Putri</b></div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-3"><p>No. Kontrakan</p></div>
+                                        <div class="col-md-9"><p>1</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3"><p>Jumlah Penghuni</p></div>
+                                        <div class="col-md-9"><p>2</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3"><p>Alamat</p></div>
+                                        <div class="col-md-9"><p>Desa Sukasari, Semarang - Jawa Tengah</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3"><p>No. Telpon/HP</p></div>
+                                        <div class="col-md-9"><p>087712344321</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3"><p>Menghuni sejak</p></div>
+                                        <div class="col-md-9"><p>Mei 2016</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3"><p>Tingkat Kenyamanan</p></div>
+                                        <div class="col-md-9"><p>
+                                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                        </p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3"><p>Tunggakan</p></div>
+                                        <div class="col-md-9"><p>Tidak Ada</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a href="#" style="margin-left: 4px" class="btn btn-danger pull-right">Penghuni ini ingin/sudah Keluar</a>
+                                            <a href="#" class="btn btn-primary pull-right" data-toggle="modal" data-target="#bayar">Pembayaran Sewa</a>
+                                            <div id="bayar" class="modal fade" role="dialog">
+                                              <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Pembayaran Sewa</h4>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3"><p>Nama Penghuni</p></div>
+                                                        <div class="col-md-9"><p>Riska Putri</p></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3"><p>Tunggakan</p></div>
+                                                        <div class="col-md-9"><p>Tidak Ada</p></div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                  </div>
+                                                </div>
+
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <table class="w3-table w3-bordered w3-hoverable">
+                                <tr class="w3-blue">
+                                    <th>Nama</th>
+                                    <th>Tunggakan</th>
+                                    <th>Menghuni sejak</th>
+                                </tr>
+                                <tr>
+                                    <td id="riska" onclick="penghuni()">Riska Putri</td>
+                                    <td>Tidak Ada</td>
+                                    <td>Mei 2016</td>
+                                </tr>
+                                <tr>
+                                    <td>Rahmat Pratama</td>
+                                    <td>Bulan ini</td>
+                                    <td>September 2016</td>
+                                </tr>
+                                <tr>
+                                    <td>Rizky Balong</td>
+                                    <td>Bulan ini</td>
+                                    <td>Desember 2016</td>
+                                </tr>
+                            </table>
+                            <br><button class="btn btn-success pull-right"><span class="fa fa-plus"></span> Penghuni Baru</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="forum" class="tab-pane fade">
+                    <div class="thumbnail">
+                    <div class="w3-container">
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="pull-right">10 hari yang lalu</span>
+                            <p><a href="#"><b>Rahmat Pratama</b></a></p>
+                            <p>Air nya kecil!</p>
+                        </div>
+                    </div>
+                    <div id="balas" class="form-group collapse">
+                      <label for="comment">Balas:</label>
+                      <textarea class="form-control" rows="3" id="comment"></textarea>
+                    </div>
+                    <button data-toggle="collapse" data-target="#balas" id="balasbtn" onclick="hilang();" class="btn btn-primary pull-right"> Balas</button>
+                    <p><a href="#" data-toggle="collapse" data-target="#balas" id="batal" style="display: none;margin-left: 4px;" onclick="cancel();" class="btn btn-default pull-right">Cancel</a><a href="#" id="kirim" style="display: none" class="btn btn-success pull-right">Kirim</a></p><br>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="pull-right">12 hari yang lalu</span>
+                            <p><a href="#"><b>Riska Putri</b></a></p>
+                            <p>Pemiliknya ganteng</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary pull-right"> Balas</button><br>                    
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="glyphicon glyphicon-star w3-text-amber"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="pull-right">15 hari yang lalu</span>
+                            <p><a href="#"><b>Rizky Balong</b></a></p>
+                            <p>Gentengnya kamar saya bocor. Akan saya kasih 5 bintang jika sudah tidak bocor.</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary pull-right"> Balas</button><br>
+                </div>
+                </div> 
+                </div>
+
+        </div>
+    </div>
+    <!-- row -->
+    </div>
+    <!-- container -->
+    </div>
+<script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+    function hilang() {
+        var x = document.getElementById('balasbtn');
+        var y = document.getElementById('batal');
+        var z = document.getElementById('kirim');
+            x.style.display = 'none';
+            y.style.display = 'block';
+            z.style.display = 'block';
+    }
+    function cancel() {
+        var x = document.getElementById('balasbtn');
+        var y = document.getElementById('batal');
+        var z = document.getElementById('kirim');
+            y.style.display = 'none';
+            z.style.display = 'none';
+            x.style.display = 'block';
+    }
+    function penghuni() {
+        var y = document.getElementById('detail');
+            y.style.display = 'block';
+    }
+    </script>
+    <script>
+      function initMap() {
+        var uluru = {lat: -6.179439, lng: 106.838477};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlw60i96JYTyQk-ppcZUI06Y6oDjVzw3k&callback=initMap">
+    </script>
+
+{% endblock %}

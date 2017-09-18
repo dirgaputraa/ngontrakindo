@@ -1,0 +1,150 @@
+{% extends "pemilik2.html" %}
+{% load staticfiles %}
+{% load account %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+<div class="w3-bar w3-top w3-teal w3-large" style="z-index:4;">
+  <button id="menu" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  <button id="close" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" style="display: none;" onclick="w3_close();"><i class="fa fa-close"></i>  Close</button>
+  <span class="w3-bar-item w3-right"><a class="w3-hover-text-yellow" href="/k/{{ kontrakan.slug }}" target="blank">{{ kat }} {{ kontrakan.nama }}</a></span>
+</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+  <!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h2><b>Penghuni</b></h2>
+  </header>
+
+  <div class="w3-container">
+  <div class="row">
+  <div class="col-sm-12">
+  <h4>Kontrakan terisi: {{ kontrakan.n_penghuni }} dari {{ kontrakan.n_unit }} unit</h4>
+  <h4>Penghuni dari Ngontrakindo</h4>
+    <table class="w3-table w3-white w3-hoverable w3-bordered w3-card-4">
+      <tr class="w3-indigo">
+        <th>Nama</th>
+        <th>Profesi</th>
+        <th>Menghuni sejak</th>
+      </tr>
+{% if not penghuni.exists %}
+  <!-- <h1>Belum ada penghuni</h1> -->
+      <tr>
+        <td colspan="3" class="w3-text-grey w3-padding-16 w3-center"><b>Belum ada penghuni dari Ngontrakindo</b></td>
+      </tr>
+{% else %}
+{% for p_detail, u_detail, penghuni in z_detail %}
+      <a id="u" target="blank" href="/{{ p_detail.user }}"></a>
+      <tr>
+        <td onclick="document.getElementById('u').click()" class="w3-button w3-align-left"><img src="{{ p_detail.avatar.url }}" class="w3-circle w3-margin-right" style="width:40px">{{ u_detail.first_name }} {{ u_detail.last_name }}</td>
+        <td class="w3-button w3-padding-16">{{ p_detail.get_profesi_display }}</td>
+        <td class="w3-button w3-padding-16">{{ penghuni.tanggal_masuk|date:"d F Y" }}</td>
+      </tr>
+{% endfor %}
+{% endif %}
+    </table>
+    </div>
+  </div><br>
+  <div class="row">
+    <div class="col-sm-6">
+  <h4>Penghuni Baru</h4>
+      <table class="w3-table w3-white w3-bordered w3-card-4">
+      <tr class="w3-indigo">
+        <th colspan="2">Konfirmasi</th>
+      </tr>
+{% if not baru.exists %}
+        <tr>
+          <td colspan="2" class="w3-text-grey w3-padding-16 w3-center"><b>Belum ada penghuni baru</b></td>
+        </tr>
+{% else %}
+{% for p_baru, u_baru in z_baru %}
+      <tr>
+        <td class="w3-align-left"><a target="blank" href="/{{ p_baru.user }}"><img src="{{ p_baru.avatar.url }}" class="w3-circle w3-margin-right" style="width:40px">{{ u_baru.first_name }} {{ u_baru.last_name }}</a></td>
+        <td class=" w3-right">
+          <button data-toggle="modal" data-target="#konfirm{{ forloop.counter0 }}" class="w3-button w3-green">
+          <i class="fa fa-check"></i>
+          </button>&nbsp;
+          <button onclick="document.getElementById('no{{ forloop.counter0 }}').submit();" class="w3-button w3-red">
+          <i class="fa fa-close"></i>
+          </button>
+        </td>
+      </tr>
+          <form id="yes{{ forloop.counter0 }}" method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="konfirm" value="yes" />
+            <input type="hidden" name="user" value="{{ p_baru.user }}" />
+            <input type="hidden" name="kontrakan" value="{{ kontrakan }}" />
+            <input type="hidden" name="termasuk" id="t{{ forloop.counter0 }}" />
+          </form>
+          <form id="no{{ forloop.counter0 }}" method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="konfirm" value="no" />
+            <input type="hidden" name="user" value="{{ p_baru.user }}" />
+            <input type="hidden" name="kontrakan" value="{{ kontrakan }}" />
+          </form>
+{% endfor %}
+{% endif %}
+      </table>
+    </div>
+    <div class="col-sm-6">
+  <h4>Eks Penghuni</h4>
+      <table class="w3-table w3-white w3-hoverable w3-bordered w3-card-4">
+        <tr class="w3-indigo">
+          <th>Nama</th>
+          <th>Menghuni Sejak</th>
+          <th>Tanggal Keluar</th>
+        </tr>
+{% if not eks.exists %}
+        <tr>
+          <td colspan="3" class="w3-text-grey w3-padding-16 w3-center"><b>Belum ada eks penghuni</b></td>
+        </tr>
+{% else %}
+{% for p_eks, u_eks, eks in z_eks %}
+      <tr>
+        <td class="w3-align-left"><a target="blank" href="/{{ p_eks.user }}"><img src="{{ p_eks.avatar.url }}" class="w3-circle w3-margin-right" style="width:40px">{{ u_eks.first_name }} {{ u_eks.last_name }}</a></td>
+        <td>
+          {{ eks.tanggal_masuk|date:"d F Y" }}
+        </td>
+        <td>
+          {{ eks.tanggal_keluar|date:"d F Y" }}
+        </td>
+      </tr>
+{% endfor %}
+{% endif %}
+      </table>
+    </div>
+  </div>
+  </div> 
+</div>
+
+{% for p_baru, u_baru in z_baru %}
+        <div class="modal fade" id="konfirm{{ forloop.counter0 }}" role="dialog">
+          <div class="modal-dialog w3-card">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header w3-teal">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title"><img src="{% static 'img/logo.png' %}"></h2>
+              </div>
+              <div class="modal-body">
+              <div class="w3-container">
+                <h4 class="modal-title"><b>Sebelum konfirmasi...</b></h4>
+                  <p>Penghuni {{ kat }} {{ kontrakan }} saat ini yang bukan pengguna Ngontrakindo berjumlah {{ kontrakan.n_penghuni }} orang. Apakah <b>{{ u_baru.first_name }}</b> termasuk dari {{ kontrakan.n_penghuni }} penghuni itu?</p>
+                  <button onclick="document.getElementById('t{{ forloop.counter0 }}').value='y';document.getElementById('yes{{ forloop.counter0 }}').submit();" class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow">Ya</button>        
+                  <button onclick="document.getElementById('t{{ forloop.counter0 }}').value='n';document.getElementById('yes{{ forloop.counter0 }}').submit();" class="w3-button w3-grey w3-hover-grey w3-hover-text-black w3-text-white">Tidak</button>        
+              </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+{% endfor %}
+{% endblock %}

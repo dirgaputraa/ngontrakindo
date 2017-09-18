@@ -1,0 +1,151 @@
+{% extends "pemilik2.html" %}
+{% load staticfiles %}
+{% load account %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+<div class="w3-bar w3-top w3-teal w3-large" style="z-index:4;">
+  <button id="menu" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  <button id="close" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" style="display: none;" onclick="w3_close();"><i class="fa fa-close"></i>  Close</button>
+  <span id="asd" class="w3-bar-item w3-right"><a class="w3-hover-text-yellow" href="/k/{{ kontrakan.slug }}" target="blank"> {{ kat }} {{ kontrakan.nama }}</a></span>
+</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+<div class="modal fade" id="asdasd">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Potong Foto</h4>
+      </div>
+      <div class="modal-body">
+        <img src="" id="image" style="max-width: 100%;">
+      </div>
+      <div class="modal-footer">
+        <div class="btn-group pull-left" role="group">
+          <button type="button" class="btn btn-default js-zoom-in">
+            <span class="glyphicon glyphicon-zoom-in"></span>
+          </button>
+          <button type="button" class="btn btn-default js-zoom-out">
+            <span class="glyphicon glyphicon-zoom-out"></span>
+          </button>
+        </div>
+        <button type="button" class="btn btn-primary js-crop-and-upload">Potong dan Unggah</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- !PAGE CONTENT! -->
+<div id="Dashboard" class="w3-main city" style="margin-left:300px;margin-top:43px;">
+  <!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h2><b>Galeri</b></h2>
+  </header>  
+
+  <div class="w3-container">
+    <form method="post" enctype="multipart/form-data" id="formUpload">
+    {% csrf_token %}
+    {{ form|crispy }}
+    </form>
+  </div>
+  <div class="row w3-container">
+  {% if galeri.exists %}
+  {% for g in galeri %}
+    <div style="padding-bottom: 20px" class="col-sm-4">
+      <div class="w3-card-4 w3-display-container">
+          <img style="width: 100%;height: 240px;" src="/media/{{ g.foto }}">
+          <div class="w3-display-topleft w3-display-hover w3-text-light-grey w3-dark-grey w3-opacity">
+            <span class="w3-padding" style="font-size: 12px">{{ g.tanggal_upload|date:'d F Y' }} pada {{ g.tanggal_upload|date:'H:i' }} </span>
+          </div>
+  {% if g.foto_utama %}
+          <div class="w3-display-topright">
+          <div class="w3-green w3-padding w3-opacity"><i class="fa fa-check"></i> Foto Utama</div>
+          </div>
+  {% else %}
+          <div class="w3-display-bottomleft w3-display-hover">
+          <button onclick="document.getElementById('p').value='utama';document.getElementById('g').value='{{ g.id }}';document.getElementById('fu').submit();" class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow"><i class="fa fa-image"></i> Jadikan Foto Utama</button>
+          </div>
+          <div class="w3-display-bottomright w3-display-hover">
+          <button onclick="document.getElementById('p').value='hapus';document.getElementById('g').value='{{ g.id }}';document.getElementById('fu').submit();" class="w3-button w3-red w3-hover-red w3-hover-text-yellow"><i class="fa fa-trash"></i> Hapus</button>
+          </div>
+  {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+    <form style="display: none" id="fu" method="POST" action="">
+      {% csrf_token %}
+      <input type="hidden" name="pencet" id="p" />
+      <input type="hidden" name="gambar" id="g" />
+    </form>
+  {% else %}
+    <h1 style="padding-top: 10%" class="w3-center w3-text-grey"><i class="fa w3-xxxlarge fa-image w3-center"></i><br>Belum ada foto</h1>
+  {% endif %}
+  <!-- End page content -->
+</div>
+</div>
+  <script>
+    $(function () {
+
+      /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+      $("#id_foto").change(function () {
+        if (this.files && this.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $("#image").attr("src", e.target.result);
+            $("#asdasd").modal("show");
+          }
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+
+      /* SCRIPTS TO HANDLE THE CROPPER BOX */
+      var $image = $("#image");
+    var cropBoxData;
+    var canvasData;
+    $("#asdasd").on("shown.bs.modal", function () {
+      $image.cropper({
+        viewMode: 1,
+        aspectRatio: 4/3,
+        // minCropBoxWidth: 180,
+        // minCropBoxHeight: 180,
+        ready: function () {
+          $image.cropper("setCanvasData", canvasData);
+          $image.cropper("setCropBoxData", cropBoxData);
+        }
+      });
+    }).on("hidden.bs.modal", function () {
+      cropBoxData = $image.cropper("getCropBoxData");
+      canvasData = $image.cropper("getCanvasData");
+      $image.cropper("destroy");
+    });
+
+    // Enable zoom in button
+    $(".js-zoom-in").click(function () {
+      $image.cropper("zoom", 0.1);
+    });
+
+    // Enable zoom out button
+    $(".js-zoom-out").click(function () {
+      $image.cropper("zoom", -0.1);
+    });
+
+
+      /* SCRIPT TO COLLECT THE DATA AND POST TO THE SERVER */
+      $(".js-crop-and-upload").click(function () {
+      var cropData = $image.cropper("getData");
+      $("#id_x").val(cropData["x"]);
+      $("#id_y").val(cropData["y"]);
+      $("#id_height").val(cropData["height"]);
+      $("#id_width").val(cropData["width"]);
+      $("#formUpload").submit();
+    });
+
+    });
+</script>
+{% endblock %}

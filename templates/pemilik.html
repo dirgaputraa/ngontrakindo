@@ -1,0 +1,91 @@
+{% load staticfiles %}
+{% load account %}
+<!DOCTYPE html>
+<html>
+<title>Ngontrakindo | Administrasi Kontrakan</title>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="image/png" href="/media/favicon.ico"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'css/w3.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Noto Sans", sans-serif}
+</style>
+<body onload="myFunction()" class="w3-light-grey">
+
+<!-- Top container -->
+{% block header %}
+{% endblock %}
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s3">
+      <a href="/{{ request.user.username }}"><img src="{{ pemilik.avatar.url }}" class="w3-circle w3-margin-right" style="width:48px"></a>
+    </div>
+    <div class="w3-col s9 w3-bar">
+      <a href="/{{ request.user.username }}"><h5>{{ request.user.first_name }} {{ request.user.last_name }}</h5></a>
+    </div>
+  </div>
+  <hr>
+</nav>
+
+
+{% block content %}
+{% endblock %}
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+        document.getElementById("menu").style.display = "none";
+        document.getElementById("close").style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+    document.getElementById("menu").style.display = "block";
+    document.getElementById("close").style.display = "none";
+}
+
+function myFunction() {
+    var x = document.getElementById("kontrakan").value;
+    for (var i = 0; i < {{ kontrakan.count }}; i++) {
+      document.getElementById(i).style.display = "none";
+    }
+    document.getElementById(x).style.display = "block";      
+}
+
+function myDrop() {
+    var d = document.getElementById("Demo");
+    if (d.className.indexOf("w3-show") == -1) {
+        d.className += " w3-show";
+    } else { 
+        d.className = d.className.replace(" w3-show", "");
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,588 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load account %}
+{% load humanize %}
+{% load djmoney %}
+{% block title %}Ngontrakindo | {{ kat }} {{ kontrakan.nama }}{% endblock %}
+
+{% block css %}
+    <style>
+      #map {
+        height: 100%;
+      }
+
+      .carousel-indicators.carousel-indicators--thumbnails li {
+          width: 60px;
+          margin: 0;
+          border: none;
+          border-radius: 0;
+        }
+        .carousel-indicators.carousel-indicators--thumbnails .active {
+          background-color: transparent;
+        }
+        .carousel-indicators.carousel-indicators--thumbnails .active .thumbnail {
+          border-color: #337ab7;
+        }
+        
+        fieldset, label { margin: 0; padding: 0; }
+
+        /****** Style Star Rating Widget *****/
+
+        .rating { 
+          border: none;
+          float: left;
+        }
+
+        .rating > input { display: none; } 
+        .rating > label:before { 
+          margin: 5px;
+          font-size: 3em;
+          font-family: FontAwesome;
+          display: inline-block;
+          content: "\f005";
+        }
+
+        .rating > .half:before { 
+          content: "\f089";
+          position: absolute;
+        }
+
+        .rating > label { 
+          color: #ddd; 
+         float: right; 
+        }
+
+        /***** CSS Magic to Highlight Stars on Hover *****/
+
+        .rating > input:checked ~ label, /* show gold star when clicked */
+        .rating:not(:checked) > label:hover, /* hover current star */
+        .rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+        .rating > input:checked + label:hover, /* hover current star when changing rating */
+        .rating > input:checked ~ label:hover,
+        .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+        .rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Page Content -->
+    <div class="container" style="padding-top: 50px; height: absolute">
+            <h1>{{ kat }} {{ kontrakan.nama }}</h1>
+            <p><span class="w3-tag {{ warna }}"><i class="fa fa-home"></i> {{ kontrakan.get_kategori_display }}</span></p>
+            <!-- <br> -->
+                
+        <div class="row">
+
+            <div class="col-md-9">
+                <div class="w3-card thumbnail">
+                  
+                  <div id="Foto" class="w3-border city">
+                    <div onmouseout="document.getElementById('indi').style.display='none'" onmouseover="document.getElementById('indi').style.display='block'" id="myCarousel" class="carousel slide w3-black" data-ride="carousel">
+                      <!-- Indicators -->
+                      <ol class="carousel-indicators" id="indi" style="display: none;">
+                        {% for g in galeri %}
+                        <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.counter0 == 0 %}active{% endif %}">
+                        
+                        </li>
+                        {% endfor %}
+                      </ol>
+
+                      <!-- Wrapper for slides -->
+                      <div style="height: 460px;width: 100%" class="carousel-inner" role="listbox">
+                        {% if galeri.exists %}
+
+                        {% for g in galeri %}
+                        <div class="item {% if forloop.counter0 == 0 %}active{% endif %}">
+                          <a data-toggle="modal" data-target="#myModal{{ forloop.counter0 }}"><img style="height: 460px;max-width: 100%; position: middle" src="/media/{{ g.foto }}"></a>
+                        </div>
+                        {% endfor %}
+
+                        {% else %}
+                        <div class="w3-center">
+                        <h1 style="padding-top: 20%" class="w3-text-grey"><i class="fa w3-xxxlarge fa-image w3-center"></i><br>Belum ada foto</h1>
+                        {% if request.user == pemilik %}
+                        <a href="/administrasi/galeri/{{ kontrakan.slug }}" class="w3-button w3-indigo"><i class="fa fa-upload"></i> Upload Foto</a>
+                        {% endif %}
+                        </div>
+                        {% endif %}
+                      </div>
+
+
+                        {% for g in galeri %}
+                      <div id="myModal{{ forloop.counter0 }}" class="modal fade w3-center">
+                        <img src="/media/{{ g.foto }}" style="width: 80%; height: auto; position: center; padding-top: 3%">
+                      </div>
+                        {% endfor %}
+                        {% if galeri.exists %}
+                        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                        {% endif %}
+
+                    </div>
+                  </div>
+
+                  <div id="Peta" class="w3-border city" style="display:none">
+                    <div id="map" style="width:100%;height:460px;"></div>
+                  </div> 
+                <div class="w3-row">
+                    <div class="w3-half w3-button tablink w3-indigo" onclick="openCity(event,'Foto')"><h5><b><span class="fa fa-camera"></span> Foto</b></h5></div>
+                    <div class="w3-half w3-button tablink" onclick="openCity(event,'Peta'),initMap()"><h5><b><span class="fa fa-map"></span> Peta</b></h5></div>
+                  </div>
+                </div>             
+                <div class="w3-card w3-white w3-container thumbnail">  
+                        <h4><b>Alamat Lengkap</b></h4>
+                        <p>{{ kontrakan.alamat }}</p>
+                        </div>   
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active w3-indigo"><a data-toggle="tab" href="#deskripsi"><h5><b>Deskripsi</b></h5></a></li>
+                        <li class="w3-indigo"><a data-toggle="tab" href="#fasilitas2"><h5><b>Fasilitas</b></h5></a></li>
+                        <li class="w3-indigo"><a data-toggle="tab" href="#biaya"><h5><b>Biaya</b></h5></a></li>
+                        <li class="w3-indigo"><a data-toggle="tab" href="#sk"><h5><b>S&K</b></h5></a></li>
+                    </ul>
+                    <div class="tab-content w3-card w3-white thumbnail" style="padding-bottom: 10px">
+                        <div id="deskripsi" class="tab-pane fade in active">
+                            <br>
+                            <div class="container-fluid">
+                                <p>{{ kontrakan.deskripsi }}</p>
+                            </div>
+                        </div>
+                        <div id="fasilitas2" class="tab-pane fade">
+                            <br>
+                            <div class="container-fluid">
+                            <div class="row">
+                            <div class="col-md-12"><h5><b>Sumber Daya</b></h5></div>
+                                <div class="col-md-6">
+                                    <p><span class="fa-stack fa-1x">
+                                          <i class="fa fa-bolt fa-stack-2x fa-inverse w3-text-amber"></i>
+                                    </span> <b>Listrik:</b> {{ fasil.get_listrik_display }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><span class="fa-stack fa-1x">
+                                          <i class="fa fa-tint fa-stack-2x fa-inverse w3-text-blue"></i>
+                                    </span> <b>Air:</b> {{ fasil.get_air_display }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                            <h5><b>Fasilitas Ruangan</b></h5>
+                                {% for l_fr, fr in z_fr %}
+                                {% if fr %}
+                                    <p><span class="fa-stack fa-1x">
+                                          <i class="fa fa-check fa-stack-2x fa-inverse w3-text-green"></i>
+                                    </span> &nbsp;&nbsp;<b>{{ l_fr }}</b></p>
+                                {% else %}
+                                    <p class="w3-text-grey"><span class="fa-stack fa-1x">
+                                          <i class="fa fa-close fa-stack-2x fa-inverse w3-text-light-grey"></i>
+                                    </span> &nbsp;&nbsp;{{ l_fr }}</p>
+                                {% endif %}
+                                {% endfor %}
+                                <br>
+                            <h5><b>Fasilitas Umum</b></h5>
+                                {% for l_fu, fu in z_fu %}
+                                {% if fu %}
+                                    <p><span class="fa-stack fa-1x">
+                                          <i class="fa fa-check fa-stack-2x fa-inverse w3-text-green"></i>
+                                    </span> &nbsp;&nbsp;<b>{{ l_fu }}</b></p>
+                                {% else %}
+                                    <p class="w3-text-grey"><span class="fa-stack fa-1x">
+                                          <i class="fa fa-close fa-stack-2x fa-inverse w3-text-light-grey"></i>
+                                    </span> &nbsp;&nbsp;{{ l_fu }}</p>
+                                {% endif %}
+                                {% endfor %}
+                                <br>
+                                </div>
+                                <div class="col-md-6">
+                            <h5><b>MCK</b></h5>
+                                {% for l_mck, mck in z_mck %}
+                                {% if mck %}
+                                    <p><span class="fa-stack fa-1x">
+                                          <i class="fa fa-check fa-stack-2x fa-inverse w3-text-green"></i>
+                                    </span> &nbsp;&nbsp;<b>{{ l_mck }}</b></p>
+                                {% else %}
+                                    <p class="w3-text-grey"><span class="fa-stack fa-1x">
+                                          <i class="fa fa-close fa-stack-2x fa-inverse w3-text-light-grey"></i>
+                                    </span> &nbsp;&nbsp;{{ l_mck }}</p>
+                                {% endif %}
+                                {% endfor %}
+                                <br>
+                            <h5><b>Lingkungan Sekitar</b></h5>
+                                {% for l_ls, ls in z_ls %}
+                                {% if ls %}
+                                    <p><span class="fa-stack fa-1x">
+                                          <i class="fa fa-check fa-stack-2x fa-inverse w3-text-green"></i>
+                                    </span> &nbsp;&nbsp;<b>{{ l_ls }}</b></p>
+                                {% else %}
+                                    <p class="w3-text-grey"><span class="fa-stack fa-1x">
+                                          <i class="fa fa-close fa-stack-2x fa-inverse w3-text-light-grey"></i>
+                                    </span> &nbsp;&nbsp;{{ l_ls }}</p>
+                                {% endif %}
+                                {% endfor %}
+                                <br>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <h5><b>Fasilitas Lain</b></h5>                              
+                                <p>{{ fasil.fasilitas_lain }}</p>
+                              </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div id="biaya" class="tab-pane fade">
+                            <div class="container-fluid">
+                            <br>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                    <h5><b>Biaya Sewa</b></h5>
+                                    {% if biaya.per_hari %}
+                                    <p>{% money_localize biaya.per_hari off %} /hari</p>
+                                    {% endif %}
+                                    {% if biaya.per_minggu %}
+                                    <p>{% money_localize biaya.per_minggu off %} /minggu</p>
+                                    {% endif %}
+                                    {% if biaya.per_bulan %}
+                                    <p>{% money_localize biaya.per_bulan off %} /bulan</p>
+                                    {% endif %}
+                                    {% if biaya.per_tahun %}
+                                    <p>{% money_localize biaya.per_tahun off %} /tahun</p>
+                                    {% endif %}
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <h5><b>Denda Tunggakan</b></h5>
+                                    <p>{% money_localize biaya.denda off %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="sk" class="tab-pane fade">
+                            <div class="container-fluid">
+                            <br>
+                            <p>{{ biaya.syarat_ketentuan }}</p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="thumbnail w3-card">
+                    <div class="w3-container">
+                        {% if cek_ulasan %}                        
+                        {% for u_ul, p_ul, ulasan in z_ul %}
+                        {% if ulasan.user == request.user %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                              <h4 class="w3-text-grey">Ulasan Saya</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-1">
+                              <p><img src="{{ p_ul.avatar.url }}" class="w3-circle w3-margin-right" style="width:50px"></p>
+                            </div>
+                            <div class="col-sm-11">
+                                <p class="pull-right">
+                        {% if p_status == 'penghuni' %}                
+                                <button class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow w3-card"><i class="fa fa-pencil"></i></button>
+                        {% endif %}
+                                <button class="w3-button w3-dark-grey w3-hover-dark-grey w3-hover-text-yellow w3-card"><i class="fa fa-trash"></i></button> 
+                                </p>
+                                <p><a href="#"><b>{{ u_ul.first_name }} {{ u_ul.last_name }}</b></a><br><span style="font-size: 12px" class="w3-text-grey">{{ ulasan.timestamp|date:'d F Y' }} pada {{ ulasan.timestamp|date:'H:i' }}</span></p>
+                            {% with ''|center:ulasan.rating as range %}
+                              {% for y in range %}
+                                <span class="glyphicon glyphicon-star w3-text-grey"></span>
+                              {% endfor %}
+                            {% endwith %}
+                                <p>{{ ulasan.ulasan }}</p>
+                            </div>
+                        </div>
+                        <br>
+                        {% endif %}                        
+                        {% endfor %}
+                        {% elif not cek_ulasan and p_status == 'penghuni' %}                        
+                                <p><button data-toggle="modal" data-target="#ulasan" class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow w3-card pull-right"><i class="fa fa-pencil"></i> Berikan Rating & Ulasan</button></p>
+                        {% endif %}        
+                      <h3>Rating & Ulasan</h3>
+                      <div id="rateYo"></div>
+                      <span style="font-size: 40px">{{ t_rating.rating__avg|floatformat }}</span>
+                      <p><i class="fa fa-user"></i> total {{ ulasan.count }}</p>
+                    {% for u_ul, p_ul, ulasan in z_ul %}
+                        {% if not ulasan.user == request.user %}
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-1">
+                          <p><img src="{{ p_ul.avatar.url }}" class="w3-circle w3-margin-right" style="width:50px"></p>
+                        </div>
+                        <div class="col-sm-11">
+                            <p><a href="#"><b>{{ u_ul.first_name }} {{ u_ul.last_name }}</b></a> <span style="font-size: 12px" class="w3-text-grey">{{ ulasan.timestamp|date:'d F Y' }} pada {{ ulasan.timestamp|date:'H:i' }}</span></p>
+                        {% with ''|center:ulasan.rating as range %}
+                          {% for y in range %}
+                            <span class="glyphicon glyphicon-star w3-text-grey"></span>
+                          {% endfor %}
+                        {% endwith %}
+                            <p>{{ ulasan.ulasan }}</p>
+                            {% if not ulasan.balasan == ''  %}
+                            <div style="width: 56px" class="col-sm-1">
+                            <img src="{{ detail.avatar.url }}" class="w3-circle w3-margin-right" style="width:48px;padding-top: 5px"> 
+                            </div>
+                            <div class="col-sm-11">
+                            <span style="font-size: 12px" class="w3-text-grey">Dibalas tanggal {{ ulasan.tgl_balas|date:'d F Y' }} pada {{ ulasan.tgl_balas|date:'H:i' }}</span>
+                            <p>{{ ulasan.balasan }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+                    <div class="panel panel-default w3-card">
+                      <div class="panel-heading w3-teal">Pemilik</div>
+                      <div class="panel-body w3-center">
+                        <a href="/{{ pemilik.username }}"><img src="{{ detail.avatar.url }}" class="w3-circle" alt="Avatar" width="120" height="120"></a>
+                        <a href="/{{ pemilik.username }}"><h6><b>{{ pemilik.first_name }} {{ pemilik.last_name }}</b></h6></a>
+                        {% if request.user.username == pemilik.username %}
+                        <a href="/administrasi/dashboard/{{ kontrakan.slug }}" class="w3-button w3-indigo w3-hover-text-yellow w3-hover-indigo" style="width: 100%;">Administrasi {{ kat }}</a>
+                        {% else %}
+                        <button id="kontak" {% if request.user.is_authenticated %} onclick="this.style.display='none';document.getElementById('notelp').style.display='block';" {% else %} data-toggle="modal" data-target="#myModal" {% endif %} class="w3-button w3-indigo w3-hover-text-yellow w3-hover-indigo" style="width: 100%;"><span class="fa fa-phone"></span> Kontak</button>
+                        <button id="notelp" onclick="this.style.display='none';document.getElementById('kontak').style.display='block';" class="w3-button w3-hover-none w3-white w3-border w3-border-teal" style="width: 100%;display: none;">{{ detail.no_telp }}</button>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="panel panel-default w3-card">
+                      <div class="panel-heading w3-teal">Status {{ kat }}</div>
+                      <div class="panel-body">
+                        {% if kontrakan.status == '1' or kontrakan.status == '3' %}
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x w3-text-grey"></i>
+                              <i class="fa fa-wrench fa-stack-1x fa-inverse"></i>
+                        </span> 
+                        {% else %}
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x w3-text-green"></i>
+                              <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                        </span> 
+                        {% endif %}
+                        {{ kontrakan.get_status_display }}
+                        <br>
+                        {% if kontrakan.verifikasi %}
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x w3-text-green"></i>
+                              <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                        </span> Sudah Verifikasi
+                        <br>
+                        {% else %}
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x w3-text-grey"></i>
+                              <i class="fa fa-close fa-stack-1x fa-inverse w3-text-white"></i>
+                        </span> Belum Verifikasi
+                        <br>
+                        {% endif %}
+
+                        {% if sisa == 'penuh' %}
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x w3-text-grey"></i>
+                              <i class="fa fa-key fa-stack-1x fa-inverse"></i>
+                        </span> Penuh
+                        {% elif sisa == 'alert' %}
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x w3-text-red"></i>
+                              <i class="fa fa-key fa-stack-1x fa-inverse"></i>
+                        </span> <span class="w3-text-red">Tinggal {{ n }} dari {{ kontrakan.n_unit }} Unit</span>
+                        {% else %}
+                        <span class="fa-stack fa-1x">
+                              <i class="fa fa-square fa-stack-2x w3-text-green"></i>
+                              <i class="fa fa-key fa-stack-1x fa-inverse"></i>
+                        </span> Tersedia {{ n }} dari {{ kontrakan.n_unit }} Unit
+                        {% endif %}
+
+                        {% if biaya.per_hari %}
+                        <h5><b>{% money_localize biaya.per_hari off %}</b>/hari</h5>
+                        {% endif %}
+                        {% if biaya.per_minggu %}
+                        <h5><b>{% money_localize biaya.per_minggu off %}</b>/minggu</h5>
+                        {% endif %}
+                        {% if biaya.per_bulan %}
+                        <h5><b>{% money_localize biaya.per_bulan off %}</b>/bulan</h5>
+                        {% endif %}
+                        {% if biaya.per_tahun %}
+                        <h5><b>{% money_localize biaya.per_tahun off %}</b>/tahun</h5>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                        {% if not request.user.username == pemilik.username and not pengunjung == 'AnonymousUser' %}
+                        
+                        {% if gender %}
+                        <p>{{ kat }} {{ kontrakan }} tidak menerima penghuni {{ pengunjung.get_jk_display }}!</p>
+                        {% endif %}
+                        
+                        {% if not cek_penghuni.exists %}
+                        <p><button class="w3-button w3-card w3-indigo w3-hover-text-yellow w3-hover-indigo" style="width: 100%;">Tandai {{ kat }} Ini</button><br></p>
+                        <p><button class="w3-button w3-card w3-green w3-hover-text-yellow w3-hover-green" style="width: 100%;" data-toggle="modal" data-target="#kont">Saya sudah menjadi<br>penghuni {{ kat }} ini</button></p>
+                        
+                        {% elif p_status == 'pending' %}
+                        <p>Sedang menunggu konfirmasi dari pemilik kontrakan</p>
+                        <p><button class="w3-button w3-card w3-yellow w3-hover-orange" style="width: 100%;">Laporkan {{ kat }} ini</button></p>
+                        
+                        {% elif p_status == 'eks' %}
+                        <p>Anda pernah menghuni di kontrakan ini</p>
+                        <p><button class="w3-button w3-card w3-green w3-hover-text-yellow w3-hover-green" style="width: 100%;" data-toggle="modal" data-target="#kont">Saya jadi penghuni<br>{{ kat }} ini lagi</button></p>
+                        <p><button class="w3-button w3-card w3-yellow w3-hover-orange" style="width: 100%;">Laporkan {{ kat }} ini</button></p>
+                        
+                        {% elif p_status == 'penghuni' %}
+                        <div class="panel panel-default w3-card">
+                          <div class="panel-heading w3-teal">Penghuni</div>
+                          <div class="panel-body">
+                          {% for penghuni, p_detail in zipped %}
+                          <a href="/{{ penghuni.user }}"><p><img src="{{ penghuni.avatar.url }}" class="w3-circle w3-margin-right" style="width:40px">{{ p_detail.first_name }}
+                          {% if penghuni.tgl_lahir.day == today.day and penghuni.tgl_lahir.month == today.month %}
+                          <span class="fa fa-birthday-cake w3-text-orange"></span> <span class="fa fa-gift w3-text-pink"></span></p>
+                          {% endif %}
+                          </a>
+                          {% endfor %}
+                          </div>
+                        </div>
+                        <p><button class="w3-button w3-card w3-yellow w3-hover-orange" style="width: 100%;">Laporkan {{ kat }} ini</button></p>
+                        {% endif %}
+                        
+                        {% endif %}
+            </div>
+
+        </div>
+        <div class="modal fade" id="kont" role="dialog">
+          <div class="modal-dialog w3-card" style="width: 720px">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header w3-teal">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title">Hai, {{ request.user.first_name }}...</h2>
+              </div>
+              <div class="modal-body">
+              <div class="w3-container">
+                <h3 class="modal-title"><b>Apakah benar Anda sudah menjadi penghuni di {{ kat }} ini?</b></h3>
+                  <p>Kami akan meminta konfirmasi kepada pemilik {{ kat }} {{ kontrakan }} untuk memastikan bahwa Anda sudah menjadi penghuni kontrakan ini.</p>
+              <form class="form-horizontal" action="" method="POST">
+                  {% csrf_token %}
+                  <!-- {{ form }} -->
+                  <div style="display: none;">
+                  <label for="id_user">User:</label>
+                  <select name="user" required="" id="id_user">
+                  <option value="{{ request.user.id }}" selected="">{{ request.user }}</option>
+                  </select>
+
+                  <label for="id_kontrakan">Kontrakan:</label>
+                  <select name="kontrakan" required="" id="id_kontrakan">
+                  <option value="{{ kontrakan.id }}" selected="">{{ kontrakan }}</option>
+                  </select>
+                  </div>
+
+                  <button type="submit" class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow">Ya, saya penghuni {{ kat }} {{ kontrakan }}</button>        
+                  <div data-dismiss="modal" class="w3-button w3-dark-grey w3-hover-dark-grey w3-hover-text-yellow">Tidak</div>        
+              </form>
+              </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="modal fade" id="ulasan" role="dialog">
+          <div class="modal-dialog w3-card" style="width: 720px">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header w3-teal">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Rating dan Ulasan untuk {{ kat }} {{ kontrakan }}</h4>
+              </div>
+              <div class="modal-body">
+              <div class="w3-container">
+                <!-- <h3 class="modal-title"><b>Apakah benar Anda sudah menjadi penghuni di {{ kat }} ini?</b></h3> -->
+                <h5><img src="{{ pengunjung.avatar.url }}" class="w3-circle w3-margin-right" style="width:60px"> oleh {{ request.user.first_name }} {{ request.user.last_name }}</h5>
+              <form class="form-horizontal" action="" method="POST">
+                  {% csrf_token %}
+                  <p><fieldset class="rating">
+                    <input onclick="document.getElementById('comment').style.display = 'block';document.getElementById('comment').placeholder = 'Wow, bintang 5! Kami turut senang jika Anda nyaman disini. Apa yang ingin Anda sampaikan? Ulasan Anda akan berguna bagi pemilik dan seluruh pencari {{ kat }}.'" type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Nyaman Banget - 5 bintang"></label>
+                    <input onclick="document.getElementById('comment').style.display = 'block';document.getElementById('comment').placeholder = 'Cukup baik ya bintang 4. Apa yang ingin Anda sampaikan? Ulasan Anda akan berguna bagi pemilik dan seluruh pencari {{ kat }}.'" type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Cukup Nyaman - 4 bintang"></label>
+                    <input onclick="document.getElementById('comment').style.display = 'block';document.getElementById('comment').placeholder = 'Hmmm... biasa aja ya? Apa yang perlu diperbaiki atau ditambahkan pada {{ kat }} ini? Ulasan Anda akan berguna bagi pemilik dan seluruh pencari {{ kat }}.'" type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Biasa Aja - 3 bintang"></label>
+                    <input onclick="document.getElementById('comment').style.display = 'block';document.getElementById('comment').placeholder = 'Sepertinya kurang baik. Apa yang membuat Anda hanya memberikan 2 bintang? Ulasan Anda akan berguna bagi pemilik dan seluruh pencari {{ kat }}.'" type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kurang Nyaman - 2 bintang"></label>
+                    <input onclick="document.getElementById('comment').style.display = 'block';document.getElementById('comment').placeholder = 'Waduh, cuma satu bintang? Apa yang salah dari {{ kat }} ini? Ulasan Anda akan berguna bagi pemilik dan seluruh pencari {{ kat }}.'" type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Pengen Pindah - 1 star"></label>
+                  </fieldset></p>
+                  <br>
+                  <br>
+                  <textarea oninput="document.getElementById('btn').disabled=false" style="display: none" class="form-control" required name="ulasan" rows="5" id="comment"></textarea><br>
+                  <input hidden type="text" name="form" value="ulasan">
+
+                  <div class="pull-right"><div data-dismiss="modal" class="w3-button w3-dark-grey w3-hover-dark-grey w3-hover-text-yellow">Batal</div> <button id="btn" disabled type="submit" class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow">Kirim</button></div>
+              </form>
+              </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+    </div>
+    <!-- /.container -->
+
+{% endblock %}
+
+{% block js %}
+<script>
+    function initMap() {
+        // var lat = {{ kontrakan.lokasi.latitude }};
+        // var lng = {{ kontrakan.lokasi.longitude }};
+        var uluru = {lat: {{ kontrakan.lokasi.latitude }}, lng: {{ kontrakan.lokasi.longitude }}};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+    }
+</script>
+
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfmuhHcUGfeu4y0ipAr_Vn-zHIr1gG3qM&callback=initMap">
+</script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+<script>
+    $(function () {
+ 
+      $("#rateYo").rateYo({
+        rating: parseInt({{ t_rating.rating__avg|floatformat }}),
+        readOnly: true,
+        halfStar: true,
+        starWidth: "30px",
+      });
+    });
+
+    function openCity(evt, cityName) {
+        var i, x, tablinks;
+        x = document.getElementsByClassName("city");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < x.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" w3-indigo", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " w3-indigo";
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}Ngontrakindo - Form Kontrakan{% endblock %}
+
+{% block css %}
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      
+      
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- <div class="kepala">
+    <div class="container text-center">
+        <img class="w3-mobile" src="{% static 'img/ngontrak2.png' %}">
+    </div>
+ </div> -->
+<div id="administrasi" class="w3-light-grey" style="height: absolute;padding-top: 4%; padding-bottom: 10%">
+	<div class="container">
+        <div class="jumbotron w3-indigo">
+        <h1>1. Profil Kontrakan</h1>
+        <p>Spesifikasi kontrakan Anda</p>
+             </div>
+		<div class="col-sm-8 col-sm-offset-2">
+			 <label>Tulis wilayah administrasi kontrakan Anda</label>
+			 <input id="pac-input" type="text" class="form-control" name="search" placeholder="Kota/Kecamatan/Kelurahan/Desa"><br>
+			 <label>Letakkan marker pada lokasi kontrakan dan perbesar peta untuk akurasi lokasi yang lebih baik</label>
+			 </div>
+    		 <div class="thumbnail w3-card-4" id="map" style="width:100%;height:400px;"></div>
+		<div class="col-sm-8 col-sm-offset-2">
+  			 <form name="myForm" method="POST" action="">
+		        {% csrf_token %}
+		        {{ form|crispy }}
+		        <input type="checkbox" id="setuju"> Dengan mendaftarkan kontrakan ini, Saya sebagai pemilik kontrakan menyetujui <b>Kebijakan Privasi</b> dan <b>Syarat Penggunaan</b> Ngontrakindo.<br><br>
+		        <input style="display: none;" id="submit" class="btn w3-indigo w3-hover-teal w3-hover-text-yellow pull-right" type="submit" value="Simpan, dan lanjut ke Form Fasilitas" />
+		    </form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+	document.getElementById("div_id_lokasi").style.display = "none";
+	var m = document.getElementById('id_n_unit');
+	document.getElementById('id_kategori_1').onclick = hideNpenghuni;
+
+	function hideNpenghuni() {
+		m.style.display="none";
+		m.value = 1;
+	};
+
+	var rad = document.myForm.kategori;
+	for(var n = 1; n < rad.length; n++) {
+		rad[n].onclick = function() {
+			m.style.display="block";
+			m.value = 2;
+		};
+	};
+
+	var s = document.getElementById('setuju');
+	s.onclick = biayaLain;
+
+	function biayaLain() {
+		if (s.checked) {document.getElementById('submit').style.display = "block";}
+		else{document.getElementById('submit').style.display = "none";}
+	}
+
+	function initAutocomplete() {
+		var map = new google.maps.Map(document.getElementById('map'), {
+			center: {lat: -1.668029, lng: 118.9525525},
+			zoom: 5,
+			mapTypeId: 'roadmap'
+		});
+		
+
+		// Create the search box and link it to the UI element.
+		var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            // var icon = {
+            //   url: place.icon,
+            //   size: new google.maps.Size(71, 71),
+            //   origin: new google.maps.Point(0, 0),
+            //   anchor: new google.maps.Point(17, 34),
+            //   scaledSize: new google.maps.Size(25, 25)
+            // };
+
+            // Create a marker for each place.
+            var marker = new google.maps.Marker({
+            	map: map,
+            	title: "Arahkan pada lokasi kontrakan Anda",
+            	draggable: true,
+            	position: place.geometry.location
+            });
+
+            markers.push(marker);
+
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+			    document.getElementById("id_lokasi_0").value = this.getPosition().lat();
+			    document.getElementById("id_lokasi_1").value = this.getPosition().lng();
+			});
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });        
+      }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSTSW-U9V3kvd1rsBDBIm211NnrVxPnOU&libraries=places&callback=initAutocomplete"
+         async defer></script>
+{% endblock %}

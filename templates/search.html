@@ -1,0 +1,136 @@
+{% extends "account/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% load account %}
+{% block title %}Ngontrakindo | Pencarian{% endblock %}
+
+{% block css %}
+<style>
+	#map {
+        height: 80%;
+        width: 100%;
+      }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div style="margin-top: 32px;height: 120px;">
+  <div class="w3-row">
+    <div class="w3-mobile w3-col s4 w3-padding">
+      <input style="width: 100%" id="searchTextField" class="controls form-control" type="text" placeholder="Kota/Kecamatan/Kelurahan"><br>
+      <div class="form-group">
+		  <select class="form-control" id="sel1" onchange="filterMarkers(this.value);">
+		    <option value="">Pilih Kategori</option>
+		    <option value="Kontrakan Rumah">Kontrakan Rumah</option>
+		    <option value="Kontrakan Petakan">Kontrakan Petakan</option>
+		    <option value="Kost Putra">Kost Putra</option>
+		    <option value="Kost Putri">Kost Putri</option>
+		    <option value="Kost Campur">Kost Campur</option>
+		  </select>
+		</div>
+    </div>
+  </div>
+  </div>
+<div class="w3-mobile" id="map"></div>
+{% endblock content %}
+
+{% block js %}
+<script>
+      var markers = [];
+      function initAutocomplete() {
+      	var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 5,
+          center: {lat: -2.0533493, lng: 119.7072573}
+        });
+      
+		$.ajax({
+			method: "GET",
+			url: "/api/detail-kontrakan/",
+			success: function(data){
+				for (var i = 0; i < data.length; i++) {
+					setMarker(data[i])
+				}
+				var markerCluster = new MarkerClusterer(map, markers,{
+					imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+				});
+				
+			},
+		});
+
+		function setMarker(data){
+		    var pos = new google.maps.LatLng(data.lokasi.lat, data.lokasi.lng);
+		    var title = data.nama;
+			var kategori = data.kategori;
+		    var alamat = data.alamat;
+		    var perbulan = data.perbulan;
+	        var link = data.slug
+
+			var marker = new google.maps.Marker({
+				position: pos,
+				title: title,
+				kategori: kategori,
+				alamat: alamat,
+				perbulan: perbulan,
+				map: map
+			});
+			markers.push(marker);
+
+			marker.addListener('click', function(data) {
+	          map.panTo(this.getPosition());
+	          window.open('/k/'+link, '_blank');
+	        });
+
+			// google.maps.event.addListener(marker, 'click', (function()
+			// {
+			// 	window.open('https://www.codexworld.com', '_blank');
+			// }))
+		}
+
+		var input = document.getElementById('searchTextField');
+		var searchBox = new google.maps.places.SearchBox(input);
+
+		searchBox.addListener('places_changed', function() {
+			var places = searchBox.getPlaces();
+			if (places.length == 0) {
+				return;
+			}
+
+			// For each place, get the icon, name and location.
+			var bounds = new google.maps.LatLngBounds();
+			places.forEach(function(place) {
+				if (!place.geometry) {
+					console.log("Returned place contains no geometry");
+					return;
+				}
+
+				if (place.geometry.viewport) {
+					// Only geocodes have viewport.
+					bounds.union(place.geometry.viewport);
+				} else {
+					bounds.extend(place.geometry.location);
+				}
+			});
+			map.fitBounds(bounds);
+		});		
+      }
+
+      filterMarkers = function (category) {
+		    for (i = 0; i < markers.length; i++) {
+		        marker = markers[i];
+		        // If is same category or category not picked
+		        if (marker.kategori == category || category.length === 0) {
+		            marker.setVisible(true);
+		        }
+		        // Categories don't match 
+		        else {
+		            marker.setVisible(false);
+		 		}
+			}
+		}
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfmuhHcUGfeu4y0ipAr_Vn-zHIr1gG3qM&callback=initAutocomplete&libraries=places">
+    </script>
+{% endblock %}

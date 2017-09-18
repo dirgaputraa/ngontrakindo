@@ -1,0 +1,122 @@
+{% extends "pemilik2.html" %}
+{% load staticfiles %}
+{% load account %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+<div class="w3-bar w3-top w3-teal w3-large" style="z-index:4;">
+  <button id="menu" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  <button id="close" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" style="display: none;" onclick="w3_close();"><i class="fa fa-close"></i>  Close</button>
+  <span class="w3-bar-item w3-right"><a class="w3-hover-text-yellow" href="/k/{{ kontrakan.slug }}" target="blank">{{ kat }} {{ kontrakan.nama }}</a></span>
+</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+  <!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h2><b>User</b></h2><br>
+  </header>
+
+  <div class="w3-container">
+  <div class="row">
+  <div class="col-sm-12">
+  <div class="table-responsive w3-card-4">
+    <table class="w3-table w3-white w3-hoverable w3-bordered ">
+      <tr class="w3-indigo">
+        <th>Nama</th>
+        <th>Sebagai</th>
+        <th>Hak Akses</th>
+        <th>Terakhir Login</th>
+      </tr>
+      <tr>
+        <td class="w3-button"><img src="{{ own.avatar.url }}" class="w3-circle w3-margin-right" style="width:40px">{{ u_own.first_name }} {{ u_own.last_name }}{% if u_own.username == request.user.username %}<i>(Anda)</i>{% endif %}</td>
+        <td class="w3-button w3-padding-16">Pemilik</td>
+        <td class="w3-button w3-padding-16">Root</td>
+        <td class="w3-button w3-padding-16">{{ u_own.last_login|date:'d F Y' }} pada {{ u_own.last_login|date:'H:i' }}</td>
+      </tr>
+{% if pengurus.exists %}
+{% for pengurus, p_peng, u_peng in z_peng %}
+      <a id="u" target="blank" href="/{{ p_peng.user }}"></a>
+      <tr>
+        <td class="w3-button w3-align-left"><img src="{{ p_peng.avatar.url }}" class="w3-circle w3-margin-right" style="width:40px">{{ u_peng.first_name }} {{ u_peng.last_name }}{% if u_peng.username == request.user.username %}<i>(Anda)</i>{% endif %}</td>
+        <td class="w3-button w3-padding-16">Pengurus</td>
+        <td class="w3-button w3-padding-16">
+        {% if pengurus.edit_kontrakan %}- Edit Kontrakan<br>{% endif %}
+        {% if pengurus.konfirm_penghuni %}- Konfirmasi Penghuni<br>{% endif %}
+        {% if pengurus.transaksi %}- Transaksi<br>{% endif %}
+        {% if pengurus.galeri %}- Galeri<br>{% endif %}
+        {% if pengurus.ulasan %}- Ulasan<br>{% endif %}
+        </td>
+        <td class="w3-button w3-padding-16">{{ u_peng.last_login|date:'d F Y' }} pada {{ u_peng.last_login|date:'H:i' }}{% if u_own.username == request.user %}<button class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow pull-right">Edit</button>{% endif %}</td>
+      </tr>
+{% endfor %}
+{% endif %}
+    </table>
+    </div>
+    </div>
+  </div><br>
+    {% if u_own.username == request.user.username %}
+  <div id="ket">
+    <button onclick="document.getElementById('ket').style.display='none';document.getElementById('formtambah').style.display='block';" id="tambah" class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow pull-right"><i class="fa fa-plus"></i> Tambah User</button>
+    Sebagai pemilik {{ kat }}, Anda dapat menambahkan user untuk membantu Anda<br>dalam menjalankan proses administrasi pada {{ kat }} {{ kontrakan.nama }}.
+  </div>
+    <div class="w3-container">
+    <div class="col-sm-6 col-sm-offset-3" id="formtambah" style="display: none;">
+    <h3><b>Tambah User</b></h3>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="nama_depan">Nama Depan:</label>
+        <input required type="text" name="nama_depan" class="form-control" id="nama_depan">
+      </div>
+      <div class="form-group">
+        <label for="nama_belakang">Nama Belakang:</label>
+        <input required type="text" name="nama_belakang" class="form-control" id="nama_belakang">
+      </div>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input required type="text" name="username" class="form-control" id="username">
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input required type="email" name="email" class="form-control" id="email">
+      </div>
+      <div class="form-group">
+        <label for="pwd">Password:</label>
+        <input required type="password" name="pwd1" class="form-control" id="pwd1">
+      </div>
+      <div class="form-group">
+        <label for="pwd">Konfirmasi Password:</label>
+        <input required type="password" name="pwd2" class="form-control" id="pwd2">
+      </div>
+        <label>Hak Akses:</label>
+      <div class="checkbox">
+        <label><input name="edit_kontrakan" type="checkbox"> Edit Profil Kontrakan</label>
+      </div>
+      <div class="checkbox">
+        <label><input name="konfirm_penghuni" type="checkbox"> Konfirmasi Penghuni</label>
+      </div>
+      <div class="checkbox">
+        <label><input name="transaksi" type="checkbox"> Pembukuan Transaksi Sewa</label>
+      </div>
+      <div class="checkbox">
+        <label><input name="galeri" type="checkbox"> Galeri</label>
+      </div>
+      <div class="checkbox">
+        <label><input name="ulasan" type="checkbox"> Ulasan</label>
+      </div>
+      <button type="submit" class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow">Simpan</button>
+      <div onclick="document.getElementById('ket').style.display='block';document.getElementById('formtambah').style.display='none';" id="tambah" class="w3-button w3-light-grey w3-hover-none w3-text-black">Batal</div>
+    </form>
+  </div>
+  </div>
+    {% endif %}
+  </div> 
+</div>
+{% endblock %}

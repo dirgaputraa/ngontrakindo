@@ -1,0 +1,162 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}Ngontrakindo - Form Kontrakan{% endblock %}
+
+{% block css %}
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      
+      
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- <div class="kepala">
+    <div class="container text-center">
+        <img class="w3-mobile" src="{% static 'img/ngontrak2.png' %}">
+    </div>
+ </div> -->
+<div class="w3-light-grey" style="height: absolute;padding-top: 4%; padding-bottom: 10%;">
+	<div class="container">
+        <div class="jumbotron w3-indigo">
+       <h1>2. Fasilitas Kontrakan</h1>
+        <p>Detail mengenai fasilitas yang ada di kontrakan Anda</p>
+             </div>
+		<div class="col-sm-8 col-sm-offset-2">
+  			 <form name="myForm" method="POST" action="">
+		        {% csrf_token %}
+		        <!-- {{ form|crispy }} -->
+		        <div id="div_id_luas" class="form-group"> <label for="id_luas" class="control-label  requiredField">
+                Luas Kontrakan(meter)<span class="asteriskField">*</span> </label> <div class="controls "> <input type="text" name="luas" required="" class="textinput textInput form-control" id="id_luas"> <p id="hint_id_luas" class="help-block">Misal: 8x5</p> </div> </div> 
+
+                <div class="row">
+        <h4><b>Sumber Daya</b></h4>
+                <div class="col-sm-6">
+                <div id="div_id_listrik" class="form-group"> <label for="id_listrik_0" class="control-label  requiredField">
+                Listrik<span class="asteriskField">*</span> </label> <div class="controls "> <div class="radio"> <label class=""> <input type="radio" name="listrik" id="id_listrik_1" value="1">Masuk Biaya Sewa
+        </label> </div> <div class="radio"> <label class=""> <input type="radio" name="listrik" id="id_listrik_2" value="2">Di Luar Biaya Sewa
+        </label> </div> </div> </div> 
+        		</div>
+        		<div class="col-sm-6">
+        <div id="div_id_air" class="form-group"> <label for="id_air_0" class="control-label  requiredField">
+                Air<span class="asteriskField">*</span> </label> <div class="controls "> <div class="radio"> <label class=""> <input type="radio" name="air" id="id_air_1" value="1">PDAM(Masuk Biaya Sewa)
+        </label> </div> <div class="radio"> <label class=""> <input type="radio" name="air" id="id_air_2" value="2">PDAM(Di Luar Biaya Sewa)
+        </label> </div> <div class="radio"> <label class=""> <input type="radio" name="air" id="id_air_3" value="3">Pompa
+        </label> </div> </div> </div> 
+        </div>
+        </div>
+
+        <div class="row">
+        <h4><b>Fasilitas Ruangan</b></h4>
+        <div class="col-sm-6">
+        <div class="form-group"> <div id="div_id_kasur" class="checkbox"> <label for="id_kasur" class=""> <input type="checkbox" name="kasur" class="checkboxinput" id="id_kasur">
+                    Kasur
+                </label> </div> </div> <div class="form-group"> <div id="div_id_lemari" class="checkbox"> <label for="id_lemari" class=""> <input type="checkbox" name="lemari" class="checkboxinput" id="id_lemari">
+                    Lemari
+                </label> </div> </div> <div class="form-group"> <div id="div_id_tv" class="checkbox"> <label for="id_tv" class=""> <input type="checkbox" name="tv" class="checkboxinput" id="id_tv">
+                    Tv
+                </label> </div> </div> 
+                </div>
+        <div class="col-sm-6">
+                <div class="form-group"> <div id="div_id_ac" class="checkbox"> <label for="id_ac" class=""> <input type="checkbox" name="ac" class="checkboxinput" id="id_ac">
+                    Ac
+                </label> </div> </div> <div class="form-group"> <div id="div_id_wifi" class="checkbox"> <label for="id_wifi" class=""> <input type="checkbox" name="wifi" class="checkboxinput" id="id_wifi">
+                    Wifi
+                </label> </div> </div> <div class="form-group"> <div id="div_id_dapur" class="checkbox"> <label for="id_dapur" class=""> <input type="checkbox" name="dapur" class="checkboxinput" id="id_dapur">
+                    Dapur
+                </label> </div> </div> 
+                </div>
+                </div>
+
+        <div class="row">
+        <h4><b>MCK</b></h4>
+        <div class="col-sm-6">
+                <div class="form-group"> <div id="div_id_kamar_mandi_dalam" class="checkbox"> <label for="id_kamar_mandi_dalam" class=""> <input type="checkbox" name="kamar_mandi_dalam" class="checkboxinput" id="id_kamar_mandi_dalam">
+                    Kamar mandi dalam
+                </label> </div> </div> <div class="form-group"> <div id="div_id_kamar_mandi_luar" class="checkbox"> <label for="id_kamar_mandi_luar" class=""> <input type="checkbox" name="kamar_mandi_luar" class="checkboxinput" id="id_kamar_mandi_luar">
+                    Kamar mandi luar
+                </label> </div> </div> <div class="form-group"> <div id="div_id_kloset_duduk" class="checkbox"> <label for="id_kloset_duduk" class=""> <input type="checkbox" name="kloset_duduk" class="checkboxinput" id="id_kloset_duduk">
+                    Kloset duduk
+                </label> </div> </div> 
+                </div>
+        <div class="col-sm-6">
+                <div class="form-group"> <div id="div_id_kloset_jongkok" class="checkbox"> <label for="id_kloset_jongkok" class=""> <input type="checkbox" name="kloset_jongkok" class="checkboxinput" id="id_kloset_jongkok">
+                    Kloset jongkok
+                </label> </div> </div> <div class="form-group"> <div id="div_id_shower" class="checkbox"> <label for="id_shower" class=""> <input type="checkbox" name="shower" class="checkboxinput" id="id_shower">
+                    Shower
+                </label> </div> </div> <div class="form-group"> <div id="div_id_wastafel" class="checkbox"> <label for="id_wastafel" class=""> <input type="checkbox" name="wastafel" class="checkboxinput" id="id_wastafel">
+                    Wastafel
+                </label> </div> </div> 
+                </div>
+                </div>
+
+		<div class="row">
+        <h4><b>Fasilitas Umum</b></h4>
+        <div class="col-sm-6">
+                <div class="form-group"> <div id="div_id_laundry" class="checkbox"> <label for="id_laundry" class=""> <input type="checkbox" name="laundry" class="checkboxinput" id="id_laundry">
+                    Laundry
+                </label> </div> </div> <div class="form-group"> <div id="div_id_jemuran" class="checkbox"> <label for="id_jemuran" class=""> <input type="checkbox" name="jemuran" class="checkboxinput" id="id_jemuran">
+                    Jemuran
+                </label> </div> </div> <div class="form-group"> <div id="div_id_parkir_mobil" class="checkbox"> <label for="id_parkir_mobil" class=""> <input type="checkbox" name="parkir_mobil" class="checkboxinput" id="id_parkir_mobil">
+                    Parkir mobil
+                </label> </div> </div> <div class="form-group"> <div id="div_id_parkir_motor" class="checkbox"> <label for="id_parkir_motor" class=""> <input type="checkbox" name="parkir_motor" class="checkboxinput" id="id_parkir_motor">
+                    Parkir motor
+                </label> </div> </div> 
+                </div>
+        <div class="col-sm-6">
+                <div class="form-group"> <div id="div_id_gerbang" class="checkbox"> <label for="id_gerbang" class=""> <input type="checkbox" name="gerbang" class="checkboxinput" id="id_gerbang">
+                    Gerbang
+                </label> </div> </div> <div class="form-group"> <div id="div_id_satpam" class="checkbox"> <label for="id_satpam" class=""> <input type="checkbox" name="satpam" class="checkboxinput" id="id_satpam">
+                    Satpam
+                </label> </div> </div> <div class="form-group"> <div id="div_id_cctv" class="checkbox"> <label for="id_cctv" class=""> <input type="checkbox" name="cctv" class="checkboxinput" id="id_cctv">
+                    Cctv
+                </label> </div> </div> 
+                </div>
+                </div>
+
+		<div class="row">
+        <h4><b>Lingkungan Sekitar</b></h4>
+        <div class="col-sm-6">
+                <div class="form-group"> <div id="div_id_rumah_sakit" class="checkbox"> <label for="id_rumah_sakit" class=""> <input type="checkbox" name="rumah_sakit" class="checkboxinput" id="id_rumah_sakit">
+                    Rumah sakit
+                </label> </div> </div> <div class="form-group"> <div id="div_id_rumah_makan" class="checkbox"> <label for="id_rumah_makan" class=""> <input type="checkbox" name="rumah_makan" class="checkboxinput" id="id_rumah_makan">
+                    Rumah makan
+                </label> </div> </div> <div class="form-group"> <div id="div_id_pasar" class="checkbox"> <label for="id_pasar" class=""> <input type="checkbox" name="pasar" class="checkboxinput" id="id_pasar">
+                    Pasar
+                </label> </div> </div> <div class="form-group"> <div id="div_id_mall" class="checkbox"> <label for="id_mall" class=""> <input type="checkbox" name="mall" class="checkboxinput" id="id_mall">
+                    Mall
+                </label> </div> </div> 
+                </div>
+        <div class="col-sm-6">
+                <div class="form-group"> <div id="div_id_mini_market" class="checkbox"> <label for="id_mini_market" class=""> <input type="checkbox" name="mini_market" class="checkboxinput" id="id_mini_market">
+                    Mini market
+                </label> </div> </div> <div class="form-group"> <div id="div_id_stasiun" class="checkbox"> <label for="id_stasiun" class=""> <input type="checkbox" name="stasiun" class="checkboxinput" id="id_stasiun">
+                    Stasiun
+                </label> </div> </div> <div class="form-group"> <div id="div_id_terminal_bus" class="checkbox"> <label for="id_terminal_bus" class=""> <input type="checkbox" name="terminal_bus" class="checkboxinput" id="id_terminal_bus">
+                    Terminal bus
+                </label> </div> </div> <div class="form-group"> <div id="div_id_akses_tol" class="checkbox"> <label for="id_akses_tol" class=""> <input type="checkbox" name="akses_tol" class="checkboxinput" id="id_akses_tol">
+                    Akses tol
+                </label> </div> </div> 
+                </div>
+                </div>
+		<div class="row">
+                <h4><b>Fasilitas Lain</b></h4>
+            </div>
+                <div id="div_id_fasilitas_lain" class="form-group"> 
+                <!-- <label for="id_fasilitas_lain" class="control-label ">
+                Fasilitas lain
+            </label> --> <div class="controls "> <textarea name="fasilitas_lain" id="id_fasilitas_lain" rows="10" cols="40" class="textarea form-control" placeholder="Tulis fasilitas lain yang ada diluar yang tercantum di atas."></textarea> </div> </div>
+		        <input class="btn w3-indigo w3-hover-teal w3-hover-text-yellow pull-right" type="submit" value="Simpan, dan lanjut ke Form Administrasi" />
+            </form>
+        </div>
+	</div>
+</div>
+{% endblock content %}
