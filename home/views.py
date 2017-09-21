@@ -20,10 +20,10 @@ def user_logged_in_(request, user, **kwargs):
 
 def index(request):
 	if request.user.is_authenticated():
+		queryset = Profil.objects.get_or_create(user=request.user, defaults={'user_type': '3'})
 		if request.user.first_name == '':
 			return HttpResponseRedirect("/lengkapi-data/")
 		else:
-			queryset = Profil.objects.get(user=request.user.pk)
 			if queryset.user_type == '1':
 				return HttpResponseRedirect("/administrasi/")
 			elif queryset.user_type == '2':
