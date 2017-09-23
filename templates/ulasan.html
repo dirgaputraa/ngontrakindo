@@ -3,15 +3,6 @@
 {% load account %}
 {% load crispy_forms_tags %}
 
-{% block header %}
-<div class="w3-bar w3-top w3-teal w3-large" style="z-index:4;">
-  <button id="menu" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <button id="close" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" style="display: none;" onclick="w3_close();"><i class="fa fa-close"></i>  Close</button>
-  <span class="w3-bar-item w3-right"><a class="w3-hover-text-yellow" href="/k/{{ kontrakan.slug }}" target="blank">{{ kat }} {{ kontrakan.nama }}</a></span>
-</div>
-</div>
-{% endblock %}
-
 {% block content %}
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>

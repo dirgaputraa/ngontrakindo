@@ -16,7 +16,8 @@ def index(request):
 		else:
 			queryset, created = Profil.objects.get_or_create(user=request.user, defaults={'user_type': '3'})
 			if queryset.user_type == '1':
-				return HttpResponseRedirect("/administrasi/")
+				kon = ProfilKontrakan.objects.get()
+				return HttpResponseRedirect("/administrasi/dashboard/%s" % kon.slug)
 			elif queryset.user_type == '2':
 				p = Pengurus.objects.get(user=request.user)
 				k = ProfilKontrakan.objects.get(id=p.kontrakan.id)
@@ -28,7 +29,7 @@ def index(request):
 
 		return render(request, "index.html", context)
 
-	return render(request, "index.html", {})
+	return HttpResponseRedirect("/accounts/login")
  		
 
 def daftar(request):

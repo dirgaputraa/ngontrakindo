@@ -5,21 +5,21 @@
 {% block title %}Ngontrakindo - Login {% endblock %}
 
 {% block content %}
-<div class="kepala" style="height: 100%">
-	<div class="container w3-text-white w3-padding-8">
+<div class="w3-light-grey" style="height: 100%;padding-top: 10%">
+	<div class="container w3-padding-8">
 		<div class="col-sm-6 col-sm-offset-3">
-			<h1 class="w3-text-yellow"><b>Log In</b></h1><hr>
+			<h1 class="w3-center"><b>Log In Kontrakan</b></h1><hr>
 			<form class="login" method="POST" action="{% url 'account_login' %}" enctype="multipart/form-data">{% csrf_token %}
 				{{ form|crispy }}
 				{% if redirect_field_value %}
 				  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 				  {% endif %}
 				  <div class="form-actions">
-				    <button class="w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow" type="submit">Log In</button>
+				    <button class="pull-right w3-button w3-indigo w3-hover-indigo w3-hover-text-yellow" type="submit">Log In</button>
 				   </div>
-				   <br>
+				   <!-- <br>
 				    <a class=" w3-hover-text-yellow" href="{% url 'account_signup' %}">Belum punya akun? Daftar<a>
-				    <a class="pull-right w3-hover-text-yellow" href="{% url 'account_reset_password' %}">Lupa Password?<a>
+				    <a class="pull-right w3-hover-text-yellow" href="{% url 'account_reset_password' %}">Lupa Password?<a> -->
 			</form>
 		</div>
 	</div>

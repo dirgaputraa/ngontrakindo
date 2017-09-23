@@ -67,9 +67,9 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                 {% if not request.user.is_authenticated %}
-                <li>
+                <!-- <li>
                     <div class="w3-button w3-hover-teal w3-hover-text-yellow w3-mobile" data-toggle="modal" data-target="#myModal">Log In</div>
-                </li>
+                </li> -->
                 {% else %}     
                 <li>
                     <a href="/{{ request.user.username }}" class="w3-button w3-hover-teal w3-hover-text-yellow w3-mobile">{{ request.user.username }}</a>

@@ -35,8 +35,13 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Noto Sans", sans-serif}
 <body class="w3-light-grey">
 
 <!-- Top container -->
-{% block header %}
-{% endblock %}
+<div class="w3-bar w3-top w3-teal w3-large" style="z-index:4;">
+  <button id="menu" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  <button id="close" class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" style="display: none;" onclick="w3_close();"><i class="fa fa-close"></i>  Close</button>
+  <span style="font-size: 14px" class="w3-bar-item w3-right"><a class="w3-hover-text-yellow" href="/accounts/logout" target="blank">Log Out</a></span>
+  <span style="font-size: 14px" id="asd" class="w3-bar-item w3-right"><a class="w3-hover-text-yellow" href="/k/{{ kontrakan.slug }}" target="blank"> {{ kat }} {{ kontrakan.nama }}</a></span>
+</div>
+</div>
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
@@ -52,11 +57,6 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Noto Sans", sans-serif}
     </div>
   </div>
   <hr>
-  {% if pemilik.user_type == '1' %}
-  <div class="w3-bar-block">
-  <a href="{% url 'dashboard' %}" class="w3-bar-item w3-button w3-padding" disabled><h4><i class="fa fa-arrow-left"></i> <b>Semua Kontrakan</b></h4></a>
-  </div>
-  {% endif %}
   <div id="bar" class="w3-bar-block">
     <a href="/administrasi/dashboard/{{ kontrakan.slug }}" class="w3-bar-item w3-button w3-padding{% if title == 'Dashboard' %} w3-indigo {% endif %} ""><h5><i class="fa fa-dashboard fa-fw"></i>  Dashboard</h5></a>
 
