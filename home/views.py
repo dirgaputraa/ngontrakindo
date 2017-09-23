@@ -9,21 +9,12 @@ from django.dispatch.dispatcher import receiver
 from allauth.account.signals import user_logged_in
 from profiles.models import *
 
-@receiver(user_logged_in, dispatch_uid="unique")
-def user_logged_in_(request, user, **kwargs):
-    u = Profil.objects.filter(user=request.user)
-    if u.exists():
-    	us = Profil.objects.get(user=request.user)
-    	us.n_login += 1
-    	us.save()
-    
-
 def index(request):
 	if request.user.is_authenticated():
-		queryset = Profil.objects.get_or_create(user=request.user, defaults={'user_type': '3'})
 		if request.user.first_name == '':
 			return HttpResponseRedirect("/lengkapi-data/")
 		else:
+			queryset, created = Profil.objects.get_or_create(user=request.user, defaults={'user_type': '3'})
 			if queryset.user_type == '1':
 				return HttpResponseRedirect("/administrasi/")
 			elif queryset.user_type == '2':

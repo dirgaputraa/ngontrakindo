@@ -229,13 +229,13 @@ class AdministrasiView(FormView):
         kont = k.last()
         f.kontrakan = kont
         f.save()
-        return HttpResponseRedirect("/k/%s" % kont.slug)
+        return redirect('dashboard')
 
 @login_required(login_url='/accounts/login/')
 def admin_view(request):
     u = Profil.objects.get(user=request.user)
     if u.user_type == '1':
-        kontrakan = Daftar.objects.filter(pemilik=request.user).order_by('tanggal_daftar')
+        kontrakan = ProfilKontrakan.objects.filter(pemilik=request.user).order_by('created')
     context = {
         "pemilik": u,
         "kontrakan": kontrakan,

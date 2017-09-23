@@ -25,19 +25,24 @@
   <div class="w3-container">
     <table class="w3-table w3-white w3-hoverable w3-bordered w3-card-4">
       <tr class="w3-indigo">
-        <th>Domain Kontrakan</th>
+        <th>Kontrakan/Kost</th>
+        <th>Kategori</th>
         <th>Tanggal Daftar</th>
         <th>Status</th>
       </tr>
 {% for k in kontrakan %}
-      <a target="blank" id="go{{ forloop.counter0 }}" href="http://{{ k.domain }}/"></a>
-      <tr {% if not k.proses %}class="w3-pale-red" {% else %} onclick="document.getElementById('go{{ forloop.counter0 }}').click()" {% endif %}>
-        <td class="w3-button w3-hover-none w3-padding-16"><b>{{ k.domain }}</b></td>
-        <td class="w3-button w3-hover-none w3-padding-16">{{ k.tanggal_daftar|date:"d M, Y H:i" }}</td>
-        <td class="w3-button w3-hover-none w3-padding-16">{% if k.proses %}Aktif{% else %}Belum Aktif{% endif %}</td>
+      <a id="go{{ forloop.counter0 }}" href="dashboard/{{ k.slug }}"></a>
+      <tr {% if k.verifikasi %}onclick="document.getElementById('go{{ forloop.counter0 }}').click()"{% else %} class="w3-pale-red"{% endif %}>
+        <td class="w3-button w3-hover-none w3-padding-16"><b>{{ k.nama }}</b></td>
+        <td class="w3-button w3-hover-none w3-padding-16">{{ k.get_kategori_display }}</td>
+        <td class="w3-button w3-hover-none w3-padding-16">{{ k.created|date:"d M, Y H:i" }}</td>
+        <td class="w3-button w3-hover-none w3-padding-16">{% if k.verifikasi %}Aktif {% else %} Belum Aktif{% endif %} </td>
       </tr>
 {% endfor %}
-    </table>
+    </table><br>
+    <div class="pull-right">
+      <p><a href="{% url 'form_kontrakan' %}" class="w3-button w3-teal">Tambah Kontrakan/Kost</a></p>
+    </div>
   </div>
 
   <!-- <div class="w3-row-padding w3-margin-bottom detail">
